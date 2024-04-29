@@ -1,0 +1,68 @@
+const myData = [
+  {
+    pickup: "Location A",
+    dropoff: "Location B",
+    gain: "100",
+    date: "2024-04-19",
+    time: "10:00 AM",
+    status: "Pending",
+  },
+  {
+    pickup: "Location C",
+    dropoff: "Location D",
+    gain: "50",
+    date: "2024-04-20",
+    time: "02:00 PM",
+    status: "Completed",
+  },
+  {
+    pickup: "Location E",
+    dropoff: "Location F",
+    gain: "80",
+    date: "2024-04-21",
+    time: "08:30 AM",
+    status: "In Transit",
+  },
+  {
+    pickup: "Location G",
+    dropoff: "Location H",
+    gain: "120",
+    date: "2024-04-22",
+    time: "11:45 AM",
+    status: "Pending",
+  },
+  {
+    pickup: "Location I",
+    dropoff: "Location J",
+    gain: "70",
+    date: "2024-04-23",
+    time: "03:15 PM",
+    status: "Completed",
+  },
+  {
+    pickup: "Location K",
+    dropoff: "Location L",
+    gain: "90",
+    date: "2024-04-24",
+    time: "09:30 AM",
+    status: "In Transit",
+  },
+  {
+    pickup: "Location M",
+    dropoff: "Location N",
+    gain: "60",
+    date: "2024-04-25",
+    time: "01:45 PM",
+    status: "Pending",
+  },
+  {
+    pickup: "Location O",
+    dropoff: "Location P",
+    gain: "110",
+    date: "2024-04-26",
+    time: "04:00 PM",
+    status: "In Transit",
+  },
+];
+
+export default myData;

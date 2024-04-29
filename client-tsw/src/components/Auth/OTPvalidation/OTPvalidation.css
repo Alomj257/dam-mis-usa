@@ -1,0 +1,108 @@
+.main_containeer {
+  font-family: Poppins, sans-serif;
+  width: 100vw;
+  display: flex;
+  color: #ffffff;
+}
+.form_side {
+  background-color: #054857;
+  width: 46%;
+}
+.image_side {
+  width: 54%;
+  height: 100vh;
+}
+.img1 {
+  background: linear-gradient(0deg, #054857 0%, #014b5b00 110%),
+    url("../../../assets/OTPvalidation/pexels-fauxels-3184292\ 1.png");
+  background-size: cover;
+  background-position: center;
+}
+
+.logo_div {
+  margin-bottom: 30px;
+}
+.text_field {
+  margin-bottom: 30px;
+}
+.text_field > h2 {
+  font-weight: 600;
+  font-size: 30px;
+}
+.text_field > h5 {
+  font-family: Poppins;
+  font-size: 18px;
+  font-weight: 400;
+}
+.logo_title {
+  height: fit-content;
+  width: fit-content;
+  font-family: Radley, serif;
+  font-weight: 400;
+  font-size: 40px;
+}
+
+.from_input {
+  font-size: 16px;
+  padding: 0px 0px 12px 0px;
+  display: block;
+  min-width: 430px;
+  height: fit-content;
+  border: none;
+  border-bottom: 1px solid #ffffff;
+  background-color: #054857;
+  margin: 20px;
+}
+input:focus {
+  outline: none;
+}
+h1,
+h2,
+h5,
+.text_field {
+  width: fit-content;
+}
+
+::placeholder {
+  color: #ffffff;
+  font-size: small;
+}
+input[placeholder],
+[placeholder],
+*[placeholder] {
+  color: white !important;
+}
+.btn_ {
+  border: none;
+  background-color: #ffa93d;
+  border-radius: 8px;
+  margin: 10px;
+  min-height: 43px;
+  font-weight: 500;
+  font-size: 18px;
+}
+.frame3 {
+  max-height: 700px;
+  max-width: 550px;
+  margin-left: -28px;
+}
+
+.image_side {
+  align-items: flex-end;
+}
+
+.otp-input {
+  color: #ffffff;
+  font-weight: 500;
+  font-size: 20px;
+  width: 2em;
+  border: none;
+  border-bottom: 1px solid rgb(255, 255, 255);
+  margin: 0 0.5em;
+  background-color: transparent;
+  text-align: center;
+}
+
+.otp-input:last-child {
+  margin-right: 0;
+}

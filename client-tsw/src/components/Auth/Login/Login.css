@@ -1,0 +1,115 @@
+.main_containeer {
+  font-family: Poppins, sans-serif;
+  width: 100vw;
+  display: flex;
+  color: #ffffff;
+}
+.form_side {
+  background-color: #054857;
+  width: 50%;
+}
+.image_side {
+  width: 50%;
+  height: 100vh;
+}
+.img2 {
+  background: linear-gradient(0deg, #054857 0%, #014b5b00 110%),
+    url("../../../assets/Auth/pexels-fauxels.png");
+  background-size: cover;
+  background-position: center;
+}
+.logo_div {
+  margin-bottom: 30px;
+}
+.text_field {
+  margin-bottom: 30px;
+}
+.text_field > h2 {
+  font-weight: 600;
+  font-size: 33px;
+  line-height: 50px;
+  letter-spacing: 0.15em;
+}
+.text_field > h5 {
+  font-family: Poppins;
+  font-size: 20px;
+  font-weight: 400;
+  line-height: 30px;
+}
+.logo_title {
+  height: fit-content;
+  width: fit-content;
+  font-family: Radley, serif;
+  font-weight: 400;
+  font-size: 40px;
+  line-height: 50px;
+}
+
+.from_input {
+  font-size: 18px;
+  padding: 0px 0px 12px 0px;
+  display: block;
+  min-width: 430px;
+  height: fit-content;
+  border: none;
+  border-bottom: 1px solid #ffffff;
+  background-color: #054857;
+  margin: 20px;
+}
+input:focus {
+  outline: none;
+}
+h1,
+h2,
+h5,
+.text_field {
+  width: fit-content;
+}
+.check {
+  width: 100%;
+  font-family: Inter, sans-serif;
+}
+.forget {
+  font-size: 12px;
+  font-weight: 600;
+  text-decoration: none;
+  color: #ffa93d;
+}
+::placeholder {
+  color: #ffffff;
+  font-size: small;
+}
+input[placeholder],
+[placeholder],
+*[placeholder] {
+  color: white !important;
+}
+.btn_ {
+  border: none;
+  background-color: #ffa93d;
+  border-radius: 8px;
+  margin: 10px;
+  min-height: 43px;
+  font-weight: 500;
+  font-size: 18px;
+}
+.btn_g {
+  background-color: #ffffffb2;
+}
+.create {
+  font-weight: 200;
+  font-size: 12px;
+}
+
+.create > a {
+  text-decoration: none;
+  font-weight: 400;
+  font-size: 14px;
+  color: #ffffff;
+}
+/* .group > input {
+  padding-right: 70px;
+} */
+.toggleIcon {
+  margin-left: -50px !important;
+}

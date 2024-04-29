@@ -1,0 +1,22 @@
+.App {
+  text-align: center;
+}
+
+.App-logo {
+  height: 40vmin;
+  pointer-events: none;
+}
+ .appointment-form ::placeholder {
+  color: #000000;
+  font-size: small;
+}
+  .appointment-form input[placeholder],
+[placeholder],
+*[placeholder],textarea[placeholder] {
+  color: black !important;
+}
+  .appointment-form select[placeholder],
+[placeholder],
+*[placeholder] {
+  color: black !important;
+}
