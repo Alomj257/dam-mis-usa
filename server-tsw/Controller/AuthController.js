@@ -50,6 +50,7 @@ const enableUser = async (req, res) => {
     const user = await User.findById(req.body.id);
     if (!user) {
       res.status(404).json({ message: "user Id invalid" });
+      return;
     }
     user.isEnable = true;
     user.save();
