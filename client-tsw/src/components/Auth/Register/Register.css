@@ -84,7 +84,7 @@ h5,
   color: #ffffff;
   font-size: small;
 }
-input[placeholder],
+.register input[placeholder],
 [placeholder],
 *[placeholder] {
   color: white !important;

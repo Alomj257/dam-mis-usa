@@ -26,7 +26,7 @@ function ForgetPass() {
   };
 
   return (
-    <div className="main_containeer ">
+    <div className="main_containeer forget ">
       <div className="form_side d-flex flex-column justify-content-center align-items-center">
         <div className="form_containeer d-flex flex-column justify-content-center align-items-center ">
           <div className="logo_div d-flex align-items-center text_field">

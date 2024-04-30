@@ -1,10 +1,16 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import NewTaskSvg from "../../../assets/Appointment/NewTask";
 import Navbar from "../../Components/Navbar/Navbar";
 import AppointmentTable from "../../Components/AppointmentTable/AppointmentTable";
 import { Link } from "react-router-dom";
+import useFetch from "../../../Hooks/useFetch";
 
 const AppointmentPage = () => {
+  const { data } = useFetch("/appointment/");
+  const [appointment, setAppointment] = useState([]);
+  useEffect(() => {
+    setAppointment(data);
+  }, [data]);
   return (
     <>
       <Navbar title="Appointments" />
@@ -28,7 +34,7 @@ const AppointmentPage = () => {
         </Link>
       </div>
       <div className="my-4">
-        <AppointmentTable />
+        <AppointmentTable data={appointment} />
       </div>
     </>
   );

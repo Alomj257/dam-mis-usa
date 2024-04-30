@@ -69,6 +69,18 @@ exports.getAllappointmentsByDriver = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
+exports.getAllappointmentsByDriverAndStatus = async (req, res) => {
+  try {
+    const repairs = await Repair.find({
+      "repairRequest.driverId": req.params.driverId,
+      status: req.params.status,
+    });
+    console.log(repairs);
+    res.status(200).json(repairs);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
 exports.getAllRepairs = async (req, res) => {
   try {
     const repairs = await Repair.find();
@@ -79,7 +91,7 @@ exports.getAllRepairs = async (req, res) => {
 };
 exports.assginRepairToMechanics = async (req, res) => {
   try {
-    const repair = await Repair.findById(req.params.repairId);
+    const repair = await Repair.findById(req.body.repairId);
     if (!repair) {
       res.status(404).json({ message: "Invalid repair id" });
       return;
@@ -88,6 +100,7 @@ exports.assginRepairToMechanics = async (req, res) => {
     repair.repairRequest.isAssign = true;
     repair.repairRequest.mechanicsId = req.body.mechanicsId;
     repair.save();
+    console.log(repair);
     res.status(200).json("Repair assign to the mechanics successfully");
   } catch (error) {
     console.log(error);
@@ -109,9 +122,23 @@ exports.getAllAssignMechanics = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
+exports.getAllAppoinmentsByStatus = async (req, res) => {
+  try {
+    // console.log(req.params.mechanicsId);
+    const repairs = await Repair.find({
+      status: req.params.status,
+      "repairRequest.mechanicsId": req.params.mechanicsId,
+    });
+
+    res.status(200).json(repairs);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: error.message });
+  }
+};
 exports.acceptRequestByMechanics = async (req, res) => {
   try {
-    const repair = await Repair.findById(req.params.repairId);
+    const repair = await Repair.findById(req.body.repairId);
     if (!repair) {
       res.status(404).json({ message: "Invalid repair id" });
       return;
@@ -130,7 +157,7 @@ exports.acceptRequestByMechanics = async (req, res) => {
 
     await repair.save();
     await user.save();
-    res.status(200).json("Repair accepted");
+    res.status(200).json("appointment accepted");
   } catch (error) {
     console.log(error);
     res.status(500).json({ message: error.message });
@@ -139,19 +166,21 @@ exports.acceptRequestByMechanics = async (req, res) => {
 
 exports.rejectRequest = async (req, res) => {
   try {
-    const { mechanicsId, reason } = req.body;
+    const { mechanicsId, reason, repairId } = req.body;
+    console.log(req.body);
     if (!mechanicsId || !reason) {
       res.status(400).json({ message: "field empty" });
       return;
     }
-    const repair = await Repair.findById(req.params.repairId);
+    const repair = await Repair.findById(repairId);
     if (!repair) {
       res.status(404).json({ message: "Invalid repair id" });
       return;
     }
-    repair.repairRequest.reject.push({ mechanicsId, reason });
+    repair.acceptRepairRequest.reject.push({ mechanicsId, reason });
     repair.status = "Cancelled";
     repair.save();
+    res.status(200).json("Appoinment rejected");
   } catch (error) {
     console.log(error);
     res.status(500).json({ message: error.message });

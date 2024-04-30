@@ -15,8 +15,6 @@ import TruckLocate from "./Driver/Truck/TruckLocate";
 import TruckLocateTable from "./components/Truck/TruckLocateTable";
 import TruckLocateDetails from "./components/Truck/TruckLocateDetails";
 import Mechanic from "./Mechanic/Mechanic";
-import TaskTable from "./components/Mechanic/TaskTable_Mechanic";
-import myData from "./MechanicData";
 import TaskDetails from "./components/Mechanic/TaskDetails_Mechanics";
 import CompletionForm from "./components/Mechanic/CompletionForm";
 import { ToastContainer } from "react-toastify";
@@ -33,6 +31,11 @@ import Pending from "./Driver/Pages/Appointments/Pending";
 import Cancelled from "./Driver/Pages/Appointments/Cancelled";
 import Confirm from "./Driver/Pages/Appointments/Confirm";
 import AppoimentPage from "./Admin/Pages/Appointments/AppoimentPage";
+import MechanicsDashboard from "./Pages/Dashboard/MechanicsDashboard";
+import TaskPendingPage from "./Pages/TaskAppointment/TaskPendingPage";
+import TaskCompletePage from "./Pages/TaskAppointment/TaskCompletePage";
+import TaskRejectPage from "./Pages/TaskAppointment/TaskRejectPage";
+import TaskProgressPage from "./Pages/TaskAppointment/TaskProgressPage";
 
 /////////////////////////////////////////////
 
@@ -50,7 +53,7 @@ function App() {
       <ToastContainer />
       <Router>
         <Routes>
-          {/*  Driver dashbaord */}
+          {/* truck  Driver dashbaord */}
           <Route path="/truck-driver" element={<Dashboard />}>
             <Route path="appointment" element={<AppointmentPage />} />
             <Route
@@ -78,9 +81,10 @@ function App() {
             <Route path="appointment/cancelled" element={<Cancelled />} />
             <Route path="appointment/confirm" element={<Confirm />} />
           </Route>
-
+          {/* Admin */}
           <Route path="/admin/users" element={<UserPage />} />
           <Route path="/admin/appoiments" element={<AppoimentPage />} />
+          {/* authentication */}
           <Route path="/" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/forget-password" element={<ForgetPass />} />
@@ -89,8 +93,9 @@ function App() {
             path="/forget-password/reset-password"
             element={<ResetPass />}
           />
+
           {/* Appointment Pages */}
-          <Route
+          {/* <Route
             path="truck-driver/appointments/Pending"
             element={
               <AppointmentsPage
@@ -181,7 +186,7 @@ function App() {
           <Route
             path="truck-driver/appointments"
             element={<AppointmentsPage page={<BodyComp />} />}
-          />
+          /> */}
           {/* Truck Locate  */}
           <Route
             path="/truck-driver/truck-Pending"
@@ -244,15 +249,21 @@ function App() {
             }
           />
           {/* Mechanics  */}
-          <Route
+          {/* <Route
             path="/mechanic/Pending"
             element={
               <Mechanic
                 page={<TaskTable myData={myData} taskStatus={"Pending"} />}
               />
             }
-          />
-          <Route
+          /> */}
+          <Route path="/mechanic" element={<MechanicsDashboard />}>
+            <Route path="Pending" element={<TaskPendingPage />} />
+            <Route path="InProgress" element={<TaskProgressPage />} />
+            <Route path="Rejected" element={<TaskRejectPage />} />
+            <Route path="Completed" element={<TaskCompletePage />} />
+          </Route>
+          {/* <Route
             path="/mechanic/Completed"
             element={
               <Mechanic
@@ -275,9 +286,9 @@ function App() {
                 page={<TaskTable myData={myData} taskStatus={"Rejected"} />}
               />
             }
-          />
+          /> */}
           <Route
-            path="/mechanic/Rejected-details"
+            path="/mechanic/Cancelled-details"
             element={<Mechanic page={<TaskDetails status="Rejected" />} />}
           />
           <Route
@@ -285,11 +296,11 @@ function App() {
             element={<Mechanic page={<TaskDetails status="Pending" />} />}
           />
           <Route
-            path="/mechanic/Completed-details"
+            path="/mechanic/Complete-details"
             element={<Mechanic page={<TaskDetails status="Completed" />} />}
           />
           <Route
-            path="/mechanic/InProgress-details"
+            path="/mechanic/Confirm-details"
             element={<Mechanic page={<TaskDetails status="In Progress" />} />}
           />
           <Route

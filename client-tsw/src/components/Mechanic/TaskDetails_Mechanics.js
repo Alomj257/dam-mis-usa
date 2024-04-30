@@ -4,8 +4,10 @@ import HomeSvg from "../../assets/Appointment/HomeSvg";
 import NextIconSvg from "../../assets/Appointment/NextIconSvg";
 import TaskDetails from "./DetailsPageMechanic";
 import TaskSlot from "../Mechanic/TaskSlot";
+import { useLocation } from "react-router-dom";
 
 function TaskDetails_Mechanics({ status }) {
+  const { state } = useLocation();
   return (
     <div
       style={{
@@ -19,7 +21,7 @@ function TaskDetails_Mechanics({ status }) {
           <SubHeader2 text1={"New Appointments"} text2={"Appointment"} />
         }
       />
-      <TaskDetails slot={<TaskSlot s={status} />} />
+      <TaskDetails slot={<TaskSlot s={state?.status} />} />
     </div>
   );
 }

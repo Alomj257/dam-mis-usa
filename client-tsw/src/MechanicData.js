@@ -14,7 +14,7 @@ const data = [
     name: "Alice Smith",
     truckModel: "DEF456",
     date: "2024-04-20",
-    status: "Completed",
+    status: "Complete",
   },
   {
     problem:

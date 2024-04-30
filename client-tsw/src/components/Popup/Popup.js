@@ -1,15 +1,35 @@
 import React, { useState } from "react";
+import { useAuth } from "../../context/AuthContext";
+import { rejectRequestService } from "../../APIServices/Appointment/AppointmentService";
+import { toast } from "react-toastify";
 
-const RejectionForm = ({ onReject }) => {
+const RejectionForm = ({ onReject, appoinetmentId }) => {
   const [reason, setReason] = useState("");
   const [isVisible, setIsVisible] = useState(true);
+  const [auth] = useAuth();
 
   const handleChange = (event) => {
     setReason(event.target.value);
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
+    // mechanicsId, reason, repairId
     event.preventDefault();
+    try {
+      const details = {
+        mechanicsId: auth?.user?._id,
+        repairId: appoinetmentId,
+        reason,
+      };
+      const { data } = await rejectRequestService(details);
+      if (data?.message) {
+        toast.error(data?.message);
+      }
+      toast.success(data);
+    } catch (error) {
+      console.log(error);
+      toast.error(error?.response?.data?.message);
+    }
     onReject(reason);
   };
 

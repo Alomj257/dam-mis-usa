@@ -63,7 +63,7 @@ function Register() {
     }
   };
   return (
-    <div className="main_containeer ">
+    <div className="main_containeer register">
       <div className="form_side d-flex flex-column justify-content-center align-items-center">
         <div className="my_form d-flex flex-column justify-content-center align-items-center ">
           <div className="logo_div d-flex align-items-center text_field">

@@ -79,7 +79,7 @@ h5,
   color: #ffffff;
   font-size: small;
 }
-input[placeholder],
+.login  input[placeholder],
 [placeholder],
 *[placeholder] {
   color: white !important;

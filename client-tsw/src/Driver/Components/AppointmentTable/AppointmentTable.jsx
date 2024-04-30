@@ -8,7 +8,7 @@ import CancelStatusSvg from "../../../assets/Appointment/CancelStatusSvg";
 import PendingStatusSvg from "../../../assets/Appointment/PendingStatusSvg";
 import ConfirmStatusSvg from "../../../assets/Appointment/ConfirmStatusSvg";
 import { useNavigate } from "react-router-dom";
-const AppointmentTable = () => {
+const AppointmentTable = ({ data }) => {
   const navigate = useNavigate();
   return (
     <>
@@ -37,35 +37,37 @@ const AppointmentTable = () => {
               <td>STATUS</td>
             </tr>
 
-            {myCollection.map((item, index) => {
-              const status = haldleStatus(item?.status);
-              const href = `/truck-driver/appointment/${item?.status?.toLowerCase()}-appointment`;
-              return (
-                <tr key={item?.status}>
-                  <td
-                    style={{
-                      padding: "20px",
-                      width: "40%",
-                    }}
-                    className="first_col"
-                  >
-                    <button
-                      className="bg-transparent border-0"
-                      onClick={() => navigate(href, { state: item })}
-                      style={{ textDecoration: "none", color: "inherit" }}
-                    >
-                      {item.description.length > 47
-                        ? item?.description?.slice(0, 44) + "...."
-                        : item?.description}
-                    </button>
-                  </td>
-                  <td className="rest_col">{item?.workshop}</td>
-                  <td className="rest_col">{item?.location}</td>
-                  <td className="rest_col">{item?.timeSlot}</td>
-                  <td className="last_col">{status}</td>
-                </tr>
-              );
-            })}
+            {Array.isArray(data)
+              ? data?.map((item, index) => {
+                  const status = haldleStatus(item?.status);
+                  const href = `/truck-driver/appointment/${item?.status?.toLowerCase()}-appointment`;
+                  return (
+                    <tr key={item?.status}>
+                      <td
+                        style={{
+                          padding: "20px",
+                          width: "40%",
+                        }}
+                        className="first_col"
+                      >
+                        <button
+                          className="bg-transparent border-0"
+                          onClick={() => navigate(href, { state: item })}
+                          style={{ textDecoration: "none", color: "inherit" }}
+                        >
+                          {item?.description?.length > 47
+                            ? item?.description?.slice(0, 44) + "...."
+                            : item?.description}
+                        </button>
+                      </td>
+                      <td className="rest_col">{item?.workshop}</td>
+                      <td className="rest_col">{item?.location}</td>
+                      <td className="rest_col">{item?.timeSlot}</td>
+                      <td className="last_col">{status}</td>
+                    </tr>
+                  );
+                })
+              : ""}
           </table>
           <div
             className="bottom_page_div"

@@ -4,6 +4,7 @@ import NewAppointmentsSvg from "../../assets/Mechanic/NewAppointmentsSvg";
 import CompleteSvg from "../../assets/Appointment/CompleteSvg";
 import PendingSvg from "../../assets/Mechanic/PendingSvg";
 import RejectedSvg from "../../assets/Mechanic/Rejected";
+import { Link } from "react-router-dom";
 function Side_Bar() {
   return <SideBar />;
 }
@@ -70,30 +71,30 @@ const SideBar = () => {
           >
             Appointments
           </h5>
-          <a href="/mechanic/Pending">
+          <Link to="/mechanic/Pending">
             <AppointmentElement
               logo={<NewAppointmentsSvg color={"#919191"} />}
               title="New Appointment"
             />
-          </a>
-          <a href="/mechanic/InProgress">
+          </Link>
+          <Link to="/mechanic/InProgress">
             <AppointmentElement
               logo={<PendingSvg color={"#919191"} />}
               title="In Progress"
             />
-          </a>
-          <a href="/mechanic/Rejected">
+          </Link>
+          <Link to="/mechanic/Rejected">
             <AppointmentElement
               logo={<RejectedSvg color={"#919191"} />}
               title="Rejected"
             />
-          </a>
-          <a href="/mechanic/Completed">
+          </Link>
+          <Link to="/mechanic/Completed">
             <AppointmentElement
               logo={<CompleteSvg color={"#919191"} />}
               title="Completed"
             />
-          </a>
+          </Link>
         </div>
       </div>
     </div>

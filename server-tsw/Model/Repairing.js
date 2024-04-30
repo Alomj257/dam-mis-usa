@@ -18,7 +18,7 @@ const RepairSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    vanNumber: {
+    truckNumber: {
       type: String,
     },
     model: {

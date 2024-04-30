@@ -1,27 +1,18 @@
 import React, { useEffect, useState } from "react";
 import useFetch from "../../../Hooks/useFetch";
-import { toast } from "react-toastify";
-import { userEnableService } from "../../../APIServices/Auth/AuthService";
+import AssignPop from "../AssignPop/AssignPop";
 
 const AppoimentTable = () => {
-  const { data, reFetch } = useFetch("/appointment/");
+  const { data } = useFetch("/appointment/");
+  const [openPop, setOpenPop] = useState(false);
+  const [appoint, setAppoint] = useState(null);
   const [appointment, setUsers] = useState([]);
   useEffect(() => {
     setUsers(data);
   }, [data]);
-  const handleEnable = async (userId) => {
-    try {
-      const { data } = await userEnableService({ id: userId });
-      if (data?.message) {
-        toast.error(data?.message);
-        return;
-      }
-      toast.success(data);
-      reFetch();
-    } catch (error) {
-      console.log(error);
-      toast.error(error?.response?.data?.message);
-    }
+  const handleAssign = (item) => {
+    setOpenPop(true);
+    setAppoint(item);
   };
   return (
     <div>
@@ -47,7 +38,8 @@ const AppoimentTable = () => {
                   <td>{item?.status}</td>
                   <td>
                     <button
-                      onClick={() => handleEnable(item?._id)}
+                      // onClick={() => handleEnable(item?._id)}
+                      onClick={() => handleAssign(item)}
                       disabled={item?.status !== "Pending"}
                       className={`btn btn-${
                         item?.isEnable ? "success" : "primary"
@@ -55,6 +47,11 @@ const AppoimentTable = () => {
                     >
                       {item?.status !== "Pending" ? " Assgined" : " Assgin"}
                     </button>
+                    <AssignPop
+                      appointment={appoint}
+                      openPop={openPop}
+                      setPop={setOpenPop}
+                    />
                   </td>
                 </tr>
               ))

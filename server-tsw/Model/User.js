@@ -42,7 +42,7 @@ const userSchema = new mongoose.Schema(
     profile: String,
     idProof: String,
     truckPhoto: String,
-    busySlot: [String],
+    busySlot: Array,
     role: {
       type: String,
       required: true,

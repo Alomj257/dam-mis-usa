@@ -7,8 +7,7 @@ import CompleteStatusSvg from "../../assets/Appointment/CompleteStatusSvg";
 import CancelStatusSvg from "../../assets/Appointment/CancelStatusSvg";
 import StatusComp from "../../assets/Mechanic/StatusComp";
 import Header from "./Header_Mechanic";
-import { useAuth } from "../../context/AuthContext";
-import { getTransportsByMechanicsService } from "../../APIServices/Appointment/AppointmentService";
+import { useNavigate } from "react-router-dom";
 
 // for rounting problem
 function removeSpaceBetweenWords(inputString) {
@@ -16,20 +15,14 @@ function removeSpaceBetweenWords(inputString) {
 }
 
 const TaskTable = ({ myData, taskStatus }) => {
+  if (taskStatus === "In Progress") {
+    taskStatus = "Confirm";
+  }
+  if (taskStatus === "Rejected") {
+    taskStatus = "Cancelled";
+  }
   const statusFiltering = DataFilter(myData, taskStatus);
-  const [appointments, setAppointments] = useState([]);
-  const [auth] = useAuth();
-  useEffect(() => {
-    const getData = async () => {
-      try {
-        const { data } = await getTransportsByMechanicsService(auth?.user?._id);
-        setAppointments(data);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    getData();
-  }, [auth?.user?._id]);
+  const navigate = useNavigate();
 
   return (
     <div
@@ -38,7 +31,7 @@ const TaskTable = ({ myData, taskStatus }) => {
         margin: "50px",
       }}
     >
-      <Header header={taskStatus + " " + "Appointments"} />
+      <Header header={taskStatus + "  Appointments"} />
 
       <div className="table_sec" style={{ height: "78vh" }}>
         <div
@@ -67,8 +60,8 @@ const TaskTable = ({ myData, taskStatus }) => {
               <td>STATUS</td>
             </tr>
 
-            {Array.isArray(appointments)
-              ? appointments.map((item, index) => {
+            {Array.isArray(statusFiltering)
+              ? statusFiltering.map((item, index) => {
                   const status = handleStatus(item.status);
                   // const letterCount = handleLetterCount(item.problem, 47);
                   const s = removeSpaceBetweenWords(item.status);
@@ -80,16 +73,11 @@ const TaskTable = ({ myData, taskStatus }) => {
                         style={{
                           paddingLeft: "70px",
                         }}
+                        onClick={() => navigate(href, { state: item })}
                       >
-                        <a
-                          href={href}
-                          style={{
-                            textDecoration: "none",
-                            color: "inherit",
-                          }}
-                        >
-                          {item?.description}
-                        </a>
+                        {item?.description?.length > 47
+                          ? item.description?.slice(0, 47) + "..."
+                          : item.description}
                       </td>
                       <td className="rest_col">{item?.name}</td>
                       <td className="rest_col">{item?.model}</td>
@@ -137,7 +125,7 @@ const DataFilter = (data, status) => {
 };
 
 function handleStatus(s) {
-  if (s === "Completed") {
+  if (s === "Complete") {
     return (
       <StatusComp
         icon={<CompleteStatusSvg />}
@@ -149,20 +137,24 @@ function handleStatus(s) {
     return (
       <StatusComp icon={<PendingStatusSvg />} status={s} color={"#DDAF0A"} />
     );
-  } else if (s === "Rejected") {
+  } else if (s === "Cancelled") {
     return (
       <StatusComp icon={<CancelStatusSvg />} status={s} color={"#DD0000"} />
     );
-  } else if (s === "In Progress") {
+  } else if (s === "In Progress" || s === "Confirm") {
     return (
-      <StatusComp icon={<PendingStatusSvg />} status={s} color={"#DDAF0A"} />
+      <StatusComp
+        icon={<PendingStatusSvg />}
+        status="In Progress"
+        color={"#DDAF0A"}
+      />
     );
   }
 }
-function handleLetterCount(text, maxLength) {
-  if (text.length <= maxLength) {
-    return text;
-  }
+// function handleLetterCount(text, maxLength) {
+//   if (text.length <= maxLength) {
+//     return text;
+//   }
 
-  return text.substring(0, maxLength) + ".....";
-}
+//   return text.substring(0, maxLength) + ".....";
+// }

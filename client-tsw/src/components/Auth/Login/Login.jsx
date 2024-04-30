@@ -37,7 +37,7 @@ function Login() {
       setAuth({ ...auth, user: data?.user, token: data?.token });
       Cookies.set("auth", JSON.stringify(data));
       if (data.user.role === "DRIVER") {
-        navigate("/truck-driver/appointments");
+        navigate("/truck-driver/appointment");
       }
       if (data.user.role === "MECHANICS") {
         navigate("/mechanic/Pending");
@@ -51,7 +51,7 @@ function Login() {
     }
   };
   return (
-    <div className="main_containeer ">
+    <div className="main_containeer login">
       <div className="form_side d-flex flex-column justify-content-center align-items-center">
         <div className="d-flex flex-column justify-content-center align-items-center ">
           <div className="logo_div d-flex align-items-center text_field">

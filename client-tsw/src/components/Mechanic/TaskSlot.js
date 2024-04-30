@@ -3,21 +3,25 @@ import PendingStatusSvg from "../../assets/Appointment/PendingStatusSvg";
 import CompleteStatusSvg from "../../assets/Appointment/CompleteStatusSvg";
 import CancellStatusSvg from "../../assets/Appointment/CancelStatusSvg";
 import RejectionForm from "../Popup/Popup";
+import { useLocation } from "react-router-dom";
+import { toast } from "react-toastify";
+import { useAuth } from "../../context/AuthContext";
+import { acceptRequestService } from "../../APIServices/Appointment/AppointmentService";
 
 const TaskSlot = ({ s }) => {
-  if (s === "Completed") {
+  if (s === "Complete") {
     return (
       <TaskFormCompleted
         status={
           <StatusComp
             icon={<CompleteStatusSvg />}
-            status={"Completed"}
+            status={"Complete"}
             color="#047A3A"
           />
         }
       />
     );
-  } else if (s === "Rejected") {
+  } else if (s === "Rejected" || s === "Cancelled") {
     return (
       <TaskFormRejected
         status={
@@ -29,7 +33,7 @@ const TaskSlot = ({ s }) => {
         }
       />
     );
-  } else if (s === "In Progress") {
+  } else if (s === "In Progress" || s === "Confirm") {
     return (
       <TaskFormInProgress
         status={
@@ -57,7 +61,8 @@ const TaskSlot = ({ s }) => {
 };
 export default TaskSlot;
 
-const StatusDetails = ({ t1, t2, d1, d2 }) => {
+const StatusDetails = ({ name1, name2, t1, t2, d1, d2 }) => {
+  const { state } = useLocation();
   return (
     <div style={{ display: "flex" }}>
       <div style={{ width: "50%", marginTop: "10px" }}>
@@ -83,7 +88,7 @@ const StatusDetails = ({ t1, t2, d1, d2 }) => {
             marginTop: "-15px",
           }}
         >
-          {d1}
+          {state[name1]}
         </p>
       </div>
 
@@ -110,7 +115,7 @@ const StatusDetails = ({ t1, t2, d1, d2 }) => {
             marginTop: "-15px",
           }}
         >
-          {d2}
+          {state[name2]}
         </p>
       </div>
     </div>
@@ -119,6 +124,26 @@ const StatusDetails = ({ t1, t2, d1, d2 }) => {
 
 const TaskFormPending = ({ status }) => {
   const [showRejectionForm, setShowRejectionForm] = useState(false);
+  const { state } = useLocation();
+  const [auth] = useAuth();
+  const acceptRequest = async (repairId) => {
+    try {
+      const details = {
+        mechanicsId: auth?.user?._id,
+        repairId,
+        startTime: new Date(),
+        endTime: new Date(),
+      };
+      const { data } = await acceptRequestService(details);
+      if (data?.message) {
+        toast.error(data?.message);
+      }
+      toast.success(data);
+    } catch (error) {
+      console.log(error);
+      toast.error(error?.response?.data?.message);
+    }
+  };
 
   const handleRejectClick = () => {
     setShowRejectionForm(true);
@@ -132,13 +157,26 @@ const TaskFormPending = ({ status }) => {
 
   return (
     <div style={{ marginTop: "25px" }}>
-      {showRejectionForm ? <RejectionForm onReject={handleReject} /> : ""}
+      {showRejectionForm ? (
+        <RejectionForm appoinetmentId={state?._id} onReject={handleReject} />
+      ) : (
+        ""
+      )}
 
       <div style={{ width: "100%" }}>
         <h2 style={{ marginBottom: "10px" }}> Available Slot</h2>
 
-        <StatusDetails t1="Status" t2="Date" d1={status} d2="Date" />
         <StatusDetails
+          name1="status"
+          name2="timeSlot"
+          t1="Status"
+          t2="Date"
+          d1={status}
+          d2="Date"
+        />
+        <StatusDetails
+          name1="location"
+          name2="workshop"
           t1="Location"
           t2="Workshop"
           d1="Location"
@@ -167,13 +205,7 @@ const TaskFormPending = ({ status }) => {
               marginTop: "-15px",
             }}
           >
-            {" "}
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Tempore
-            pariatur quam aut enim eveniet doloribus iste necessitatibus nemo
-            repudiandae officia! Placeat voluptatibus facere nobis quaerat Lorem
-            ipsum dolor sit amet consectetur adipisicing elit. Tempore pariatur
-            quam aut enim eveniet doloribus iste necessitatibus nemo repudiandae
-            officia! Placeat voluptatibus facere nobis quaerat
+            {state?.description}
           </p>
         </div>
 
@@ -203,6 +235,7 @@ const TaskFormPending = ({ status }) => {
             Reject
           </button>
           <button
+            onClick={() => acceptRequest(state?._id)}
             style={{
               backgroundColor: "#054857",
               borderRadius: "6px",
@@ -222,13 +255,21 @@ const TaskFormPending = ({ status }) => {
 };
 
 const TaskFormRejected = ({ status }) => {
+  const { state } = useLocation();
   return (
     <>
       <div style={{ marginTop: "25px" }}>
         <div style={{ width: "100%" }}>
           <h2 style={{ marginBottom: "10px" }}> Available Slot</h2>
 
-          <StatusDetails t1="Status" t2="Date" d1={status} d2="Date" />
+          <StatusDetails
+            name1="status"
+            name2="timeSlot"
+            t1="Status"
+            t2="Date"
+            d1={status}
+            d2="Date"
+          />
 
           <div style={{ width: "106%", marginTop: "10px" }}>
             <p
@@ -253,20 +294,20 @@ const TaskFormRejected = ({ status }) => {
                 // marginTop: "-15px",
               }}
             >
-              {" "}
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Tempore
-              pariatur quam aut enim eveniet doloribus iste necessitatibus nemo
-              repudiandae officia! Placeat voluptatibus facere nobis quaerat
-              exercitationem odit accusantium corporis aliquam?{" "}
+              {state?.description}
             </p>
           </div>
           <StatusDetails
+            name1="location"
+            name2="workshop"
             t1="Location"
             t2="Workshop"
             d1="Location"
             d2="Workshop"
           />
           <StatusDetails
+            name1="mechanic"
+            name2="phone"
             t1="Mechanic"
             t2="Phone"
             d1="Mechanic Name"
@@ -296,11 +337,11 @@ const TaskFormRejected = ({ status }) => {
                 // marginTop: "-15px",
               }}
             >
-              {" "}
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Tempore
-              pariatur quam aut enim eveniet doloribus iste necessitatibus nemo
-              repudiandae officia! Placeat voluptatibus facere nobis quaerat
-              exercitationem odit accusantium corporis aliquam?{" "}
+              {
+                state?.acceptRepairRequest?.reject[
+                  state?.acceptRepairRequest?.reject?.length - 1
+                ]?.reason
+              }
             </p>
           </div>
         </div>
@@ -312,12 +353,20 @@ const TaskFormRejected = ({ status }) => {
 const arr = ["abc", "def", "ghi"];
 
 const TaskFormCompleted = ({ status }) => {
+  const { state } = useLocation();
   return (
     <div style={{ marginTop: "25px" }}>
       <div style={{ width: "100%" }}>
         <h2 style={{ marginBottom: "10px" }}> Available Slot</h2>
 
-        <StatusDetails t1="Status" t2="Date" d1={status} d2="Date" />
+        <StatusDetails
+          name1="status"
+          name2="timeSlot"
+          t1="Status"
+          t2="Date"
+          d1={status}
+          d2="Date"
+        />
 
         <div style={{ width: "106%", marginTop: "10px" }}>
           <p
@@ -342,19 +391,20 @@ const TaskFormCompleted = ({ status }) => {
             }}
           >
             {" "}
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Tempore
-            pariatur quam aut enim eveniet doloribus iste necessitatibus nemo
-            repudiandae officia! Placeat voluptatibus facere nobis quaerat
-            exercitationem odit accusantium corporis aliquam?{" "}
+            {state?.description}
           </p>
         </div>
         <StatusDetails
+          name1="location"
+          name2="workshop"
           t1="Location"
           t2="Workshop"
           d1="Location"
           d2="Workshop"
         />
         <StatusDetails
+          name1="mechanic"
+          name2="phone"
           t1="Mechanic"
           t2="Phone"
           d1="Mechanic name"
@@ -407,13 +457,23 @@ const TaskFormCompleted = ({ status }) => {
 };
 
 const TaskFormInProgress = ({ status }) => {
+  const { state } = useLocation();
   return (
     <div style={{ marginTop: "25px" }}>
       <div style={{ width: "100%" }}>
         <h2 style={{ marginBottom: "10px" }}> Available Slot</h2>
 
-        <StatusDetails t1="Status" t2="Date" d1={status} d2="Date" />
         <StatusDetails
+          name1="status"
+          name2="timeSlot"
+          t1="Status"
+          t2="Date"
+          d1={status}
+          d2="Date"
+        />
+        <StatusDetails
+          name1="location"
+          name2="workshop"
           t1="Location"
           t2="Workshop"
           d1="Location"
@@ -443,12 +503,7 @@ const TaskFormInProgress = ({ status }) => {
             }}
           >
             {" "}
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Tempore
-            pariatur quam aut enim eveniet doloribus iste necessitatibus nemo
-            repudiandae officia! Placeat voluptatibus facere nobis quaerat Lorem
-            ipsum dolor sit amet consectetur adipisicing elit. Tempore pariatur
-            quam aut enim eveniet doloribus iste necessitatibus nemo repudiandae
-            officia! Placeat voluptatibus facere nobis quaerat
+            {state?.description}
           </p>
         </div>
 

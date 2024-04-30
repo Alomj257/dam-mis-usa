@@ -70,7 +70,7 @@ h5,
   color: #ffffff;
   font-size: small;
 }
-input[placeholder],
+.reset input[placeholder],
 [placeholder],
 *[placeholder] {
   color: white !important;
