@@ -1,0 +1,19 @@
+.option-open{
+    height: fit-content;
+    width: fit-content;
+    z-index: 10;
+    transition:height 1.5s;
+}
+.option-close{
+    overflow: hidden;
+    height: 0;
+    width: 0;
+    transition:height 1.5s;
+}
+.option-open li:hover{
+    background: lightgray;
+}
+.admin-userTable-search input::placeholder{
+    color: black;
+    font-size: 20px;
+}

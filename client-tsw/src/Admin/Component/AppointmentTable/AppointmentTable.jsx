@@ -1,4 +1,5 @@
 import React from "react";
+import myCollection from "../../../myCollection";
 import PrevSvg from "../../../assets/Appointment/PrevSvg";
 import { Pagination } from "antd";
 import NextSvg from "../../../assets/Appointment/NextSvg";

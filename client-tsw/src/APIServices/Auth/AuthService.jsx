@@ -15,3 +15,7 @@ export const resetPasswordService = async (data) =>
   await Axios.post("/auth/users/update/password", data);
 export const userEnableService = async (data) =>
   await Axios.post(`/auth/users/enable`, data);
+export const disableUserService = async (userId) =>
+  await Axios.post(`/auth/users/disable`, userId);
+export const deleteUserService = async (id) =>
+  await Axios.delete(`/auth/users/${id}`);

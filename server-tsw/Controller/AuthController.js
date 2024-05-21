@@ -59,9 +59,37 @@ const enableUser = async (req, res) => {
     return res.status(500).json({ message: error.message });
   }
 };
+const disableUser = async (req, res) => {
+  try {
+    const user = await User.findById(req.body.id);
+    if (!user) {
+      res.status(404).json({ message: "user Id invalid" });
+    }
+    user.isEnable = false;
+    user.save();
+    res.status(200).json("user disabled successfully ");
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ message: error.message });
+  }
+};
+const deleteUser = async (req, res) => {
+  try {
+    const user = await User.findById(req.params.id);
+    if (!user) {
+      res.status(404).json({ message: "user Id invalid" });
+    }
+    await User.findByIdAndDelete(req.params.id);
+    res.status(200).json("user deleted successfully ");
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ message: error.message });
+  }
+};
 
 const forgetPassword = async (req, res) => {
   try {
+    console.log(req.body);
     const user = await User.findOne({ email: req.body.email });
     if (!user) {
       return res
@@ -71,6 +99,7 @@ const forgetPassword = async (req, res) => {
     const otp = await generateOTP();
     const otpEmail = `<p>please do not share this one time password its your responsible OTP: <strong>${otp}</strong> </p> `;
     user.otp.otp = otp;
+    console.log(user);
     user.save();
 
     await sendEmail(otpEmail, user.email, "noreply your OTP");
@@ -225,4 +254,6 @@ module.exports = {
   forgetPassword,
   verifyOtp,
   updatePassword,
+  disableUser,
+  deleteUser,
 };

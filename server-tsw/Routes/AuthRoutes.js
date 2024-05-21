@@ -9,6 +9,8 @@ const {
   forgetPassword,
   verifyOtp,
   updatePassword,
+  disableUser,
+  deleteUser,
 } = require("../Controller/AuthController");
 const { Admin } = require("../Middlewares/VerifyRole");
 const uploadFile = require("../Middlewares/uploadFile");
@@ -20,6 +22,8 @@ AuthRoutes.post(
   register
 );
 AuthRoutes.post("/users/enable", Admin, enableUser);
+AuthRoutes.post("/users/disable", Admin, disableUser);
+AuthRoutes.delete("/users/:id", Admin, deleteUser);
 AuthRoutes.post("/login", login);
 AuthRoutes.put("/update/:id", updateUserDetails);
 AuthRoutes.put(

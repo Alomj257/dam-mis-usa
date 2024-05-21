@@ -6,11 +6,6 @@ import Register from "./components/Auth/Register/Register";
 import ForgetPass from "./components/Auth/FogetPassword/ForgetPass";
 import OTPvalidation from "./components/Auth/OTPvalidation/OTPvalidation";
 import ResetPass from "./components/Auth/ResetPass/ResetPass";
-import AppointmentsPage from "./Driver/Appointments/AppointmentPage";
-import BodyComp from "./components/Appointments/BodyComp";
-import ApointmentStatusPage from "./components/Appointments/AppointmentStatusPage";
-import ApointStatusDetails from "./components/Appointments/AppointmentStatusDetails";
-import myCollection from "./myCollection";
 import TruckLocate from "./Driver/Truck/TruckLocate";
 import TruckLocateTable from "./components/Truck/TruckLocateTable";
 import TruckLocateDetails from "./components/Truck/TruckLocateDetails";
@@ -18,7 +13,6 @@ import Mechanic from "./Mechanic/Mechanic";
 import TaskDetails from "./components/Mechanic/TaskDetails_Mechanics";
 import CompletionForm from "./components/Mechanic/CompletionForm";
 import { ToastContainer } from "react-toastify";
-import UserPage from "./Admin/Pages/User/UserPage";
 import Dashboard from "./Driver/Pages/Dashboard/Dashboard";
 import AppointmentPage from "./Driver/Pages/Appointments/AppointmentPage";
 import NewAppoinment from "./Driver/Pages/Appointments/NewAppoinment";
@@ -36,6 +30,8 @@ import TaskPendingPage from "./Pages/TaskAppointment/TaskPendingPage";
 import TaskCompletePage from "./Pages/TaskAppointment/TaskCompletePage";
 import TaskRejectPage from "./Pages/TaskAppointment/TaskRejectPage";
 import TaskProgressPage from "./Pages/TaskAppointment/TaskProgressPage";
+import AdminDashboard from "./Admin/Pages copy/Dashboard/Dashboard";
+import UserPage from "./Admin/Pages copy/User/UserPage";
 
 /////////////////////////////////////////////
 
@@ -82,8 +78,11 @@ function App() {
             <Route path="appointment/confirm" element={<Confirm />} />
           </Route>
           {/* Admin */}
-          <Route path="/admin/users" element={<UserPage />} />
+          {/* <Route path="/admin/users" element={<UserPage />} /> */}
           <Route path="/admin/appoiments" element={<AppoimentPage />} />
+          <Route path="/admin" element={<AdminDashboard />}>
+            <Route path="users" element={<UserPage />} />
+          </Route>
           {/* authentication */}
           <Route path="/" element={<Login />} />
           <Route path="/register" element={<Register />} />

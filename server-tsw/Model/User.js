@@ -74,5 +74,6 @@ module.exports = User;
 // "email":"mech@gmail.com",
 // "password":"mech",
 
-// "email":"dr@gmail.com",
-// "password":"dr",
+//  deriver
+// kokijof943@lucvu.com
+// Password :"Kokijof943@"
