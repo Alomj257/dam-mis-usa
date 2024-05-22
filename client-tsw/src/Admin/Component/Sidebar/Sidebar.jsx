@@ -2,12 +2,11 @@ import React from "react";
 import TruckLogo from "../../../assets/Auth/Truck_logo";
 import ConfirmSvg from "../../../assets/Appointment/ConfirmSvg";
 import PendingSvg from "../../../assets/Appointment/PendingSvg";
-import CancelledSvg from "../../../assets/Appointment/CanceledSvg";
-import InTransitSvg from "../../../assets/Appointment/CanceledSvg";
-import CompletedSvg from "../../../assets/Appointment/CompleteSvg";
-import NewTaskSvg from "../../../assets/Appointment/NewTask";
+import { RxDashboard } from "react-icons/rx";
 import "./Sidebar.css";
 import { NavLink } from "react-router-dom";
+import { BsPeople } from "react-icons/bs";
+import { FaTruckFast } from "react-icons/fa6";
 
 const SideBar = () => {
   return (
@@ -50,12 +49,12 @@ const SideBar = () => {
               marginTop: "1.4rem",
             }}
           >
-            Book Apointment
+            Overview
           </h5>
-          <NavLink to="/truck-driver/appointment">
+          <NavLink to="/admin">
             <AppointmentElement
-              logo={<NewTaskSvg color={"#919191"} />}
-              title="Book Appointment"
+              logo={<RxDashboard color={"#919191"} />}
+              title="Dashboard"
             />
           </NavLink>
         </div>
@@ -70,19 +69,10 @@ const SideBar = () => {
               marginTop: "1.4rem",
             }}
           >
-            Appointments
+            User Management
           </h5>
-          <NavLink to="/truck-driver/appointment/pending">
-            <AppointmentElement logo={<PendingSvg />} title="Pending" />
-          </NavLink>
-          <NavLink to="/truck-driver/appointment/cancelled">
-            <AppointmentElement logo={<CancelledSvg />} title="Cancelled" />
-          </NavLink>
-          <NavLink to="/truck-driver/appointment/confirm">
-            <AppointmentElement logo={<ConfirmSvg />} title="Confirm" />
-          </NavLink>
-          <NavLink to="/truck-driver/appointment/complete">
-            <AppointmentElement logo={<CompletedSvg />} title="Complete" />
+          <NavLink to="/admin/users">
+            <AppointmentElement logo={<BsPeople />} title="Users" />
           </NavLink>
         </div>
         <div className="section">
@@ -96,19 +86,39 @@ const SideBar = () => {
               marginTop: "1.4rem",
             }}
           >
-            Truck Locate
+            Truck Managament
           </h5>
-          <NavLink to="/truck-driver/truck-pending">
+          <NavLink to="/admin/appointments">
             <AppointmentElement
-              logo={<NewTaskSvg color={"#919191"} />}
-              title="New Task"
+              logo={<PendingSvg color={"#919191"} />}
+              title="Appointments"
             />
           </NavLink>
-          <NavLink to="/truck-driver/truck-intransit">
-            <AppointmentElement logo={<InTransitSvg />} title="In Transit" />
+          <NavLink to="/admin/truck-location">
+            <AppointmentElement
+              logo={<FaTruckFast size={25} />}
+              title="Truck Locate"
+            />
           </NavLink>
-          <NavLink to="/truck-driver/truck-completed">
-            <AppointmentElement logo={<CompletedSvg />} title="Completed" />
+        </div>
+        <div className="section">
+          <h5
+            className="section_title"
+            style={{
+              color: "grey",
+              fontWeight: "500",
+              fontSize: "1.1rem",
+              marginBottom: "1.3rem",
+              marginTop: "1.4rem",
+            }}
+          >
+            Workshops
+          </h5>
+          <NavLink to="/admin/appointments">
+            <AppointmentElement
+              logo={<ConfirmSvg color={"#919191"} />}
+              title="Inventory"
+            />
           </NavLink>
         </div>
       </div>

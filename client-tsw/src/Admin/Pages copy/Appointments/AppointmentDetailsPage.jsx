@@ -4,7 +4,7 @@ import HomeSvg from "../../../assets/Appointment/HomeSvg";
 import Navbar from "../../Component/Navbar/Navbar";
 import BackPathHeader from "../../Component/BackPathHeader/BackPathHeader";
 
-const AppointmentDetailsPage = () => {
+const AdminAppointmentDetailsPage = () => {
   return (
     <div>
       <Navbar title="Appointment" />
@@ -23,4 +23,4 @@ const AppointmentDetailsPage = () => {
   );
 };
 
-export default AppointmentDetailsPage;
+export default AdminAppointmentDetailsPage;

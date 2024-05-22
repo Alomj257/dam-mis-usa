@@ -102,6 +102,9 @@ const UserTable = () => {
       toast.error(error?.response?.data?.message);
     }
   };
+  const handlePageNumber = (page) => {
+    console.log(page);
+  };
   return (
     <>
       <div className="d-flex admin-userTable-search justify-content-end my-4 gap-4">
@@ -229,6 +232,7 @@ const UserTable = () => {
               <Pagination
                 defaultCurrent={1}
                 total={100}
+                onChange={handlePageNumber}
                 showSizeChanger={false}
                 theme={{
                   token: {

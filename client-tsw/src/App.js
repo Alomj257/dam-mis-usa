@@ -32,6 +32,8 @@ import TaskRejectPage from "./Pages/TaskAppointment/TaskRejectPage";
 import TaskProgressPage from "./Pages/TaskAppointment/TaskProgressPage";
 import AdminDashboard from "./Admin/Pages copy/Dashboard/Dashboard";
 import UserPage from "./Admin/Pages copy/User/UserPage";
+import AdminAppointmentPage from "./Admin/Pages copy/Appointments/AppointmentPage";
+import AdminAppointmentDetailsPage from "./Admin/Pages copy/Appointments/AppointmentDetailsPage";
 
 /////////////////////////////////////////////
 
@@ -82,6 +84,11 @@ function App() {
           <Route path="/admin/appoiments" element={<AppoimentPage />} />
           <Route path="/admin" element={<AdminDashboard />}>
             <Route path="users" element={<UserPage />} />
+            <Route path="appointments" element={<AdminAppointmentPage />} />
+            <Route
+              path="appointments/details"
+              element={<AdminAppointmentDetailsPage />}
+            />
           </Route>
           {/* authentication */}
           <Route path="/" element={<Login />} />
