@@ -2,7 +2,7 @@ import React from "react";
 import Navbar from "../../Component/Navbar/Navbar";
 import AppointmentTable from "../../Component/AppointmentTable/AppointmentTable";
 
-const Cancelled = () => {
+const AdminCancelled = () => {
   return (
     <div>
       {" "}
@@ -14,4 +14,4 @@ const Cancelled = () => {
   );
 };
 
-export default Cancelled;
+export default AdminCancelled;

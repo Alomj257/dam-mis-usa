@@ -1,10 +1,10 @@
 import React from "react";
-import Navbar from "../../../Components/Navbar/Navbar";
-import BackPathHeader from "../../../Components/BackPathHeader/BackPathHeader";
 import HomeSvg from "../../../../assets/Appointment/HomeSvg";
-import AppointmentDetails from "../../../Components/AppointmentDetails/AppointmentDetails";
+import Navbar from "../../../Component/Navbar/Navbar";
+import AppointmentDetails from "../../../Component/AppointmentDetails/AppointmentDetails";
+import BackPathHeader from "../../../../Driver/Components/BackPathHeader/BackPathHeader";
 
-const CompletePage = () => {
+const AdminCompletePage = () => {
   return (
     <div>
       <Navbar title="Appointment" />
@@ -25,4 +25,4 @@ const CompletePage = () => {
   );
 };
 
-export default CompletePage;
+export default AdminCompletePage;

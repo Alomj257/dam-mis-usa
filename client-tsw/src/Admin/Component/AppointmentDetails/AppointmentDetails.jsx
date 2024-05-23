@@ -3,35 +3,74 @@ import "./AppointmentDetails.css";
 import { useLocation } from "react-router-dom";
 import CompleteStatusSvg from "../../../assets/Appointment/CompleteStatusSvg";
 import { haldleStatus } from "../AppointmentTable/AppointmentTable";
+import { updateAppointmentService } from "../../../APIServices/Appointment/AppointmentService";
+import { toast } from "react-toastify";
 const AppointmentDetails = () => {
-  const { state } = useLocation();
-  console.log(state);
+  const { state, pathname } = useLocation();
+  const path = pathname?.trim().split("/")[1];
+  const [editable, setEditable] = useState(true);
+  const [appointment, setappointment] = useState(state);
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setappointment({ ...appointment, [name]: value });
+  };
+  const handleUpdate = async (e) => {
+    e.preventDefault();
+    try {
+      const { data } = await updateAppointmentService(appointment, state?._id);
+      if (data?.message) {
+        toast.error(data?.message);
+        return;
+      }
+      toast.success(data);
+    } catch (error) {
+      console.log(error);
+      toast.error(error?.response?.data?.message || error?.response?.data);
+    }
+  };
   return (
     <div className="appointment-details">
       <div style={{ width: "100%", overflow: "hidden", margin: "50px" }}>
-        <form action="" style={{ width: "100%" }}>
+        <form action="" style={{ width: "100%" }} onSubmit={handleUpdate}>
           <div style={{ width: "100%" }}>
-            <h2 style={{ marginBottom: "-10px" }}>Personal Information</h2>
+            <div className="d-flex justify-content-between align-items-center">
+              <h2 style={{ marginBottom: "-10px" }}>Personal Information</h2>
+              {path === "admin" && editable && (
+                <button
+                  onClick={() => setEditable(!editable)}
+                  type="button"
+                  className="appoinment-edit"
+                >
+                  Edit
+                </button>
+              )}
+            </div>
             <DoubleInput
               name1="name"
               name2="email"
-              state={state}
+              state={appointment}
+              editable={editable}
               title1={"Name"}
               title2={"Email"}
+              handleChange={handleChange}
             />
             <DoubleInput
               name1="truckNumber"
-              state={state}
+              state={appointment}
+              editable={editable}
               name2="model"
               title1={"Truck Number"}
               title2={"Truck Model"}
+              handleChange={handleChange}
             />
             <DoubleInput
               name1="phone"
               name2="driverLicense"
               title1={"Phone Number"}
-              state={state}
+              state={appointment}
+              editable={editable}
               title2={"Driving License"}
+              handleChange={handleChange}
             />
           </div>
 
@@ -41,8 +80,10 @@ const AppointmentDetails = () => {
               <DoubleInput
                 name1="status"
                 name2="timeSlot"
+                handleChange={handleChange}
                 title1={"Status"}
-                state={state}
+                editable={editable}
+                state={appointment}
                 title2={"Date"}
               />
               <div style={{ width: "106%", marginTop: "10px" }}>
@@ -59,8 +100,9 @@ const AppointmentDetails = () => {
                   type="text"
                   placeholder="Enter Problem"
                   name="description"
-                  value={state?.description}
-                  disabled={state?.description}
+                  onChange={handleChange}
+                  value={appointment?.description}
+                  disabled={editable}
                   style={{
                     width: "90%",
                     border: "1px solid rgba(208, 213, 221, 1)",
@@ -76,13 +118,17 @@ const AppointmentDetails = () => {
                 name2="workshop"
                 title1={"Location"}
                 title2={"Workshop"}
-                state={state}
+                state={appointment}
+                editable={editable}
+                handleChange={handleChange}
               />
               <DoubleInput
                 name1="mechanics"
                 name2="phone"
                 title1={"Mechanics"}
-                state={state}
+                state={appointment}
+                editable={editable}
+                handleChange={handleChange}
                 title2={"Phone"}
               />
               <div style={{ width: "106%", marginTop: "10px" }}>
@@ -121,11 +167,12 @@ const AppointmentDetails = () => {
               Extras
             </p>
             <input
+              onChange={handleChange}
               type="text"
               placeholder="Enter Problem"
               name="description"
-              value={state?.extra}
-              disabled={state?.extra}
+              value={appointment?.extra}
+              disabled={editable}
               style={{
                 width: "90%",
                 border: "1px solid rgba(208, 213, 221, 1)",
@@ -139,11 +186,13 @@ const AppointmentDetails = () => {
           <DoubleInput
             name1="totalBill"
             name2="Paid"
-            state={state}
+            state={appointment}
+            editable={editable}
             title1={"Total Bill"}
             title2={"Bill Paid "}
+            handleChange={handleChange}
           />
-          {state?.status === "Cancelled" && (
+          {appointment?.status === "Cancelled" && (
             <div style={{ width: "106%", marginTop: "10px" }}>
               <p
                 style={{
@@ -158,8 +207,9 @@ const AppointmentDetails = () => {
                 type="text"
                 placeholder="Enter Problem"
                 name="description"
-                value={state?.description}
-                disabled={state?.description}
+                value={appointment?.description}
+                disabled={editable}
+                onChange={handleChange}
                 style={{
                   width: "90%",
                   border: "1px solid rgba(208, 213, 221, 1)",
@@ -229,6 +279,17 @@ const AppointmentDetails = () => {
               Save
             </button> */}
           </div>
+          {!editable && (
+            <div className="d-flex my-3 align-items-center justify-content-center">
+              <button
+                onSubmit={handleUpdate}
+                type="submit"
+                className="appoinment-edit"
+              >
+                Save
+              </button>
+            </div>
+          )}
         </form>
       </div>
     </div>
@@ -245,6 +306,7 @@ const DoubleInput = ({
   name2,
   title1,
   title2,
+  editable,
   fileName,
   handleChange,
 }) => {
@@ -290,8 +352,9 @@ const DoubleInput = ({
             type="text"
             placeholder={title1}
             name={name1}
+            onChange={handleChange}
             value={state[name1] ? state[name1] : ""}
-            disabled={state[name1] ? true : false}
+            disabled={editable}
             style={{
               width: "90%",
               border: "1px solid rgba(208, 213, 221, 1)",
@@ -318,7 +381,8 @@ const DoubleInput = ({
           placeholder={title2}
           name={name2}
           value={state[name2]}
-          disabled={state[name2] ? true : false}
+          disabled={editable}
+          onChange={handleChange}
           style={{
             width: "90%",
             border: "1px solid rgba(208, 213, 221, 1)",
@@ -340,6 +404,7 @@ const DoubleSelect = ({
   state,
   title2,
   handleChange,
+  editable,
 }) => {
   return (
     <div style={{ display: "flex", width: "100%", marginTop: "10px" }}>
@@ -356,7 +421,8 @@ const DoubleSelect = ({
         <select
           placeholder={"abc"}
           name={name1}
-          disabled={state[name1]}
+          disabled={editable}
+          onChange={handleChange}
           style={{
             width: "90%",
             border: "1px solid rgba(208, 213, 221, 1)",
@@ -385,7 +451,8 @@ const DoubleSelect = ({
         <select
           placeholder={"abc"}
           name={name2}
-          disabled={state[name2]}
+          disabled={editable}
+          onChange={handleChange}
           style={{
             width: "90%",
             border: "1px solid rgba(208, 213, 221, 1)",

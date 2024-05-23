@@ -4,14 +4,16 @@ import { useLocation } from "react-router-dom";
 import CompleteStatusSvg from "../../../assets/Appointment/CompleteStatusSvg";
 import { haldleStatus } from "../AppointmentTable/AppointmentTable";
 const AppointmentDetails = () => {
-  const { state } = useLocation();
-  console.log(state);
+  const { state, pathname } = useLocation();
+  const path = pathname.trim().split("/")[1];
+
   return (
     <div className="appointment-details">
       <div style={{ width: "100%", overflow: "hidden", margin: "50px" }}>
         <form action="" style={{ width: "100%" }}>
           <div style={{ width: "100%" }}>
-            <h2 style={{ marginBottom: "-10px" }}>Personal Information</h2>
+            {" "}
+            <h2 style={{ marginBottom: "-10px" }}>Personal Information</h2>{" "}
             <DoubleInput
               name1="name"
               name2="email"

@@ -1,12 +1,19 @@
 const mongoose = require("mongoose");
-const transportationSchema = mongoose.Schema({
-  userId: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
-  vanNumber: { type: String, required: true },
-  onLoad: { type: String, required: true },
-  onBoard: String,
-  status: Array,
-  parts: [{ type: mongoose.Schema.Types.ObjectId, ref: "Parts" }],
-});
+const transportationSchema = mongoose.Schema(
+  {
+    userId: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+    truckNumber: { type: String, required: true },
+    pickup: { type: String, required: true },
+    dropoff: String,
+    gain: String,
+    assingTo: String,
+    phone: Number,
+    date: String,
+    time: String,
+    status: Array,
+  },
+  { timestamps: true }
+);
 
 const Transportation = mongoose.model("transportation", transportationSchema);
 

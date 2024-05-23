@@ -64,7 +64,7 @@ const AppointmentTable = () => {
             {Array.isArray(appointment)
               ? appointment?.map((item, index) => {
                   const status = haldleStatus(item?.status);
-                  const href = `/truck-driver/appointment/${item?.status?.toLowerCase()}-appointment`;
+                  const href = `/admin/appointment/${item?.status?.toLowerCase()}-appointment`;
                   return (
                     <tr key={item?.status}>
                       <td

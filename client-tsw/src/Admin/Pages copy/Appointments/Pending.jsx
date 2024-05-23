@@ -4,7 +4,7 @@ import AppointmentTable from "../../Component/AppointmentTable/AppointmentTable"
 import { useAuth } from "../../../context/AuthContext";
 import useFetch from "../../../Hooks/useFetch";
 
-const Pending = () => {
+const AdminPending = () => {
   const [auth] = useAuth();
   const { data } = useFetch(`/appointment/status/${auth?.user?._id}/Pending`);
   console.log(auth?.user?._id);
@@ -23,4 +23,4 @@ const Pending = () => {
   );
 };
 
-export default Pending;
+export default AdminPending;

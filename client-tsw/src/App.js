@@ -33,7 +33,13 @@ import TaskProgressPage from "./Pages/TaskAppointment/TaskProgressPage";
 import AdminDashboard from "./Admin/Pages copy/Dashboard/Dashboard";
 import UserPage from "./Admin/Pages copy/User/UserPage";
 import AdminAppointmentPage from "./Admin/Pages copy/Appointments/AppointmentPage";
-import AdminAppointmentDetailsPage from "./Admin/Pages copy/Appointments/AppointmentDetailsPage";
+import AdminPendingPage from "./Admin/Pages copy/Appointments/Details/PendingPage";
+import AdminCancelledPage from "./Admin/Pages copy/Appointments/Details/CancelledPage";
+import AdminConfirmPage from "./Admin/Pages copy/Appointments/Details/ConfirmPage";
+import AdminCompletePage from "./Admin/Pages copy/Appointments/Details/CompletePage";
+import TruckLocationsPage from "./Admin/Pages copy/TruckLocation/TruckLocationsPage";
+import NewTaskPage from "./Admin/Pages copy/TruckLocation/NewTaskPage";
+import TruckLocationDetails from "./Admin/Pages copy/TruckLocation/TruckLocationDetails";
 
 /////////////////////////////////////////////
 
@@ -81,13 +87,31 @@ function App() {
           </Route>
           {/* Admin */}
           {/* <Route path="/admin/users" element={<UserPage />} /> */}
-          <Route path="/admin/appoiments" element={<AppoimentPage />} />
+          {/* <Route path="/admin/appoiments" element={<AppoimentPage />} /> */}
           <Route path="/admin" element={<AdminDashboard />}>
             <Route path="users" element={<UserPage />} />
             <Route path="appointments" element={<AdminAppointmentPage />} />
             <Route
-              path="appointments/details"
-              element={<AdminAppointmentDetailsPage />}
+              path="appointment/pending-appointment"
+              element={<AdminPendingPage />}
+            />
+            <Route
+              path="appointment/cancelled-appointment"
+              element={<AdminCancelledPage />}
+            />
+            <Route
+              path="appointment/confirm-appointment"
+              element={<AdminConfirmPage />}
+            />
+            <Route
+              path="appointment/complete-appointment"
+              element={<AdminCompletePage />}
+            />
+            <Route path="truck-location" element={<TruckLocationsPage />} />
+            <Route path="truck-location/new-task" element={<NewTaskPage />} />
+            <Route
+              path="truck-location/detail"
+              element={<TruckLocationDetails />}
             />
           </Route>
           {/* authentication */}

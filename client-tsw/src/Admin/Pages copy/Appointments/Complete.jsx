@@ -2,7 +2,7 @@ import React from "react";
 import Navbar from "../../Component/Navbar/Navbar";
 import AppointmentTable from "../../Component/AppointmentTable/AppointmentTable";
 
-const Complete = () => {
+const AdminComplete = () => {
   return (
     <div>
       <Navbar title="Complete Appointments" />
@@ -14,4 +14,4 @@ const Complete = () => {
   );
 };
 
-export default Complete;
+export default AdminComplete;
