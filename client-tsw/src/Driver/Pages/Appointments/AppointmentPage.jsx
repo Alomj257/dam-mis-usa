@@ -4,9 +4,11 @@ import Navbar from "../../Components/Navbar/Navbar";
 import AppointmentTable from "../../Components/AppointmentTable/AppointmentTable";
 import { Link } from "react-router-dom";
 import useFetch from "../../../Hooks/useFetch";
+import { useAuth } from "../../../context/AuthContext";
 
 const AppointmentPage = () => {
-  const { data } = useFetch("/appointment/");
+  const [{ user }] = useAuth();
+  const { data } = useFetch(`/appointment/driver/${user?._id}`);
   const [appointment, setAppointment] = useState([]);
   useEffect(() => {
     setAppointment(data);

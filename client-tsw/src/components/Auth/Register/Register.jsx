@@ -44,8 +44,9 @@ function Register() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     user.phone = phoneNumber;
-    user.role = !type ? "DRIVER" : "MECHANICS";
-    // console.log(user);
+
+    user.role = field !== "Mechanic" ? "DRIVER" : "MECHANICS";
+    console.log(user);
     const formData = new FormData();
 
     try {

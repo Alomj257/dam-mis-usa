@@ -115,7 +115,7 @@ const verifyOtp = async (req, res) => {
       email: req.body.email,
       "otp.otp": req.body.otp,
     });
-    console.log(req.body);
+    console.log(req.body, user);
     if (!user) {
       return res.status(404).json({ message: "wrong otp" });
     }
