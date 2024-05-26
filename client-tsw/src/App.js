@@ -40,6 +40,11 @@ import AdminCompletePage from "./Admin/Pages copy/Appointments/Details/CompleteP
 import TruckLocationsPage from "./Admin/Pages copy/TruckLocation/TruckLocationsPage";
 import NewTaskPage from "./Admin/Pages copy/TruckLocation/NewTaskPage";
 import TruckLocationDetails from "./Admin/Pages copy/TruckLocation/TruckLocationDetails";
+import InventoryPage from "./Admin/Pages copy/Inventory/InventoryPage";
+import InventoryDetailsPage from "./Admin/Pages copy/Inventory/InventoryDetailsPage";
+import AddPartsPage from "./Admin/Pages copy/Inventory/AddPartsPage";
+import UpdatePartPage from "./Admin/Pages copy/Inventory/UpdatePartPage";
+import NewWorkshopPage from "./Admin/Pages copy/Inventory/NewWorkshopPage";
 
 /////////////////////////////////////////////
 
@@ -90,6 +95,14 @@ function App() {
           {/* <Route path="/admin/appoiments" element={<AppoimentPage />} /> */}
           <Route path="/admin" element={<AdminDashboard />}>
             <Route path="users" element={<UserPage />} />
+            <Route path="workshop" element={<InventoryPage />} />
+            <Route path="workshop/new-workshop" element={<NewWorkshopPage />} />
+            <Route path="workshop/details" element={<InventoryDetailsPage />} />
+            <Route path="workshop/details/parts" element={<AddPartsPage />} />
+            <Route
+              path="workshop/details/parts/update"
+              element={<UpdatePartPage />}
+            />
             <Route path="appointments" element={<AdminAppointmentPage />} />
             <Route
               path="appointment/pending-appointment"

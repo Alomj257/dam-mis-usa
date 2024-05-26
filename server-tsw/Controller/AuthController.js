@@ -1,6 +1,7 @@
 const jwt = require("jsonwebtoken");
 const { sendEmail } = require("../Middlewares/EmailHandle");
 const User = require("../Model/user");
+const Workshop = require("../Model/Workshop");
 
 const register = async (req, res) => {
   try {
@@ -38,7 +39,10 @@ const register = async (req, res) => {
     if (req.body.role !== "ADMIN") {
       req.body = other;
     }
-    await new User(req.body).save();
+    const newUser = await new User(req.body).save();
+    const workshop = await Workshop.findById(req.body.workshop);
+    workshop.mechanics.push(newUser?._id);
+    await workshop.save();
     res.status(201).json("your account successfully created");
   } catch (error) {
     console.log(error);

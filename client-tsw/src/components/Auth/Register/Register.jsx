@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useState } from "react";
 import "./Register.css";
 import TruckLogo from "../../../assets/Auth/Truck_logo";
@@ -8,6 +8,7 @@ import ShowIcon from "../../../assets/Auth/ShowIcon";
 import UploadSvg from "../../../assets/Auth/Upload_Svg";
 import { registerService } from "../../../APIServices/Auth/AuthService";
 import { toast } from "react-toastify";
+import useFetch from "../../../Hooks/useFetch";
 function Register() {
   const [type, setType] = useState(false);
   const [typeCP, setTypeCP] = useState(false);
@@ -333,17 +334,29 @@ const Truck = ({ handleUserChange, fileName }) => {
   );
 };
 const Mechanic = ({ handleUserChange, fileName }) => {
+  const { data } = useFetch("/workshop/");
+  const [workshop, setWorkshop] = useState([]);
+  useEffect(() => {
+    setWorkshop(data);
+  }, [data]);
   return (
     <>
       <div class="group">
-        <input
+        <select
           type="text"
           placeholder="Workshop Name *"
           className="from_input"
           name="workshop"
           onChange={handleUserChange}
           required
-        />
+        >
+          <option value="">Select Workshop</option>
+          {workshop?.map((val, index) => (
+            <option key={index} className="text-capitalize" value={val?._id}>
+              {val?.workshop}
+            </option>
+          ))}
+        </select>
       </div>
       <div class="group">
         <input

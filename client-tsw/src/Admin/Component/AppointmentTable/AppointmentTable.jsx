@@ -11,6 +11,7 @@ import { BsThreeDotsVertical, BsX } from "react-icons/bs";
 import { FaUser } from "react-icons/fa6";
 import useFetch from "../../../Hooks/useFetch";
 import AssignPop from "../AssignPop/AssignPop";
+import WorkshoName from "../../../Utils/WorkshoName";
 const AppointmentTable = () => {
   const navigate = useNavigate();
   const [openOptionIndex, setOpenOptionIndex] = useState(false);
@@ -84,7 +85,9 @@ const AppointmentTable = () => {
                             : item?.description}
                         </button>
                       </td>
-                      <td className="rest_col">{item?.workshop}</td>
+                      <td className="rest_col">
+                        <WorkshoName id={item?.workshop} />
+                      </td>
                       <td className="rest_col">{item?.location}</td>
                       <td className="rest_col">{item?.timeSlot}</td>
                       <td className="last_col">{status}</td>

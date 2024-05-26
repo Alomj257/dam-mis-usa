@@ -28,7 +28,7 @@ const RepairSchema = new mongoose.Schema(
     description: String,
     location: String,
     timeSlot: String,
-    workshop: String,
+    workshop: { type: mongoose.Types.ObjectId, ref: "workshop" },
     status: {
       type: String,
       enum: ["Pending", "Cancelled", "Confirm", "Complete"],

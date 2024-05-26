@@ -5,6 +5,7 @@ import CompleteStatusSvg from "../../../assets/Appointment/CompleteStatusSvg";
 import { haldleStatus } from "../AppointmentTable/AppointmentTable";
 import { updateAppointmentService } from "../../../APIServices/Appointment/AppointmentService";
 import { toast } from "react-toastify";
+import useFetch from "../../../Hooks/useFetch";
 const AppointmentDetails = () => {
   const { state, pathname } = useLocation();
   const path = pathname?.trim().split("/")[1];
@@ -406,6 +407,16 @@ const DoubleSelect = ({
   handleChange,
   editable,
 }) => {
+  const { data } = useFetch("/workshop/");
+  const getWorkshop = useFetch(`/workshop/${state?.workshop}`);
+  const [workshop, setWorkshop] = useState(null);
+  const [workshops, setWorkshops] = useState(data);
+  useEffect(() => {
+    setWorkshops(data);
+  }, [data]);
+  useEffect(() => {
+    setWorkshop(getWorkshop?.data);
+  }, [getWorkshop?.data]);
   return (
     <div style={{ display: "flex", width: "100%", marginTop: "10px" }}>
       <div style={{ width: "50%" }}>
@@ -432,10 +443,18 @@ const DoubleSelect = ({
             marginTop: "-15px",
           }}
         >
-          <option value="">{state[name1] || "Select Location"}</option>
-          <option value="">1</option>
-          <option value="">2</option>
-          <option value="">3</option>
+          <option value={workshop?.location}>
+            {workshop?.location || "Select Location"}
+          </option>
+          {workshops?.map((val, key) => (
+            <option
+              className="text-capitalize"
+              key={val?._id}
+              value={val?.location}
+            >
+              {val?.location}
+            </option>
+          ))}
         </select>
       </div>
       <div style={{ width: "50%" }}>
@@ -462,10 +481,14 @@ const DoubleSelect = ({
             marginTop: "-15px",
           }}
         >
-          <option value="">{state[name2] || "select workshop"}</option>
-          <option value="">1</option>
-          <option value="">2</option>
-          <option value="">3</option>
+          <option value={workshop?._id}>
+            {workshop?.workshop || "select workshop"}
+          </option>
+          {workshops?.map((val, key) => (
+            <option className="text-capitalize" key={val?._id} value={val?._id}>
+              {val?.workshop}
+            </option>
+          ))}
         </select>
       </div>
     </div>

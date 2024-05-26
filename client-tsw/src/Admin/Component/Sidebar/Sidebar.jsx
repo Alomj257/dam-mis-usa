@@ -114,7 +114,7 @@ const SideBar = () => {
           >
             Workshops
           </h5>
-          <NavLink to="/admin/appointments">
+          <NavLink to="/admin/workshop">
             <AppointmentElement
               logo={<ConfirmSvg color={"#919191"} />}
               title="Inventory"

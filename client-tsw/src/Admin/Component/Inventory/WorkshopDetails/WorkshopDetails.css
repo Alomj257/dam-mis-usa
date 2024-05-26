@@ -1,0 +1,8 @@
+.workshop-details  select[placeholder], .workshop-details
+[placeholder] input[placeholder],.workshop-details
+*[placeholder] {
+  color: black !important;
+}
+.workshop-details input::placeholder{
+  color: #054857;
+}

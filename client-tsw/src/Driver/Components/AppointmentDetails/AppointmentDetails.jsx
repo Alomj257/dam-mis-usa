@@ -4,8 +4,8 @@ import { useLocation } from "react-router-dom";
 import CompleteStatusSvg from "../../../assets/Appointment/CompleteStatusSvg";
 import { haldleStatus } from "../AppointmentTable/AppointmentTable";
 const AppointmentDetails = () => {
-  const { state, pathname } = useLocation();
-  const path = pathname.trim().split("/")[1];
+  const { state } = useLocation();
+  // const path = pathname.trim().split("/")[1];
 
   return (
     <div className="appointment-details">

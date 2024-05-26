@@ -10,6 +10,8 @@ const partschema = new mongoose.Schema({
     type: Number,
     default: 0,
   },
+  price: Number,
+  workshopId: { type: mongoose.Types.ObjectId, ref: "workshop" },
 });
 
 const Parts = mongoose.model("parts", partschema);

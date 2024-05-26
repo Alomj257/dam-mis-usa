@@ -10,7 +10,10 @@ exports.CreateRepairRequest = async (req, res) => {
     const repair = new Repair(req.body);
     repair.repairRequest.driverId = driverId;
     repair.status = "Pending";
-    await repair.save();
+    const newAppoint = await repair.save();
+    const workshop = await Workshop.findById(req.body.workshop);
+    workshop?.appointments?.push(newAppoint?._id);
+    await workshop.save();
     res.status(201).json("your request has been sent");
   } catch (error) {
     console.log(error);
