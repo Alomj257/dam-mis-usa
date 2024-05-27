@@ -3,6 +3,7 @@ import { FaPlus } from "react-icons/fa6";
 import { useNavigate } from "react-router-dom";
 import useFetch from "../../../../Hooks/useFetch";
 import Loader from "../../../../Utils/Loader";
+import ErrorCustom from "../../../../Utils/Error";
 
 const Parts = ({ workshop }) => {
   const navigate = useNavigate();
@@ -30,9 +31,7 @@ const Parts = ({ workshop }) => {
           {loading ? (
             <Loader />
           ) : error ? (
-            <div className="text-center text-danger">
-              Parts Fetching error occured
-            </div>
+            <ErrorCustom name="Parts" />
           ) : (
             parts.map((val, index) => (
               <div key={index}>

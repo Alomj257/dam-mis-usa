@@ -1,10 +1,5 @@
 import React from "react";
 
-import myData from "../../MechanicData";
-import TaskTable from "./TaskTable_Mechanic";
-import TaskDetails from "./TaskDetails_Mechanics";
-import CompletionForm from "./CompletionForm";
-
 function Body_Mechanic({ page }) {
   return (
     <>

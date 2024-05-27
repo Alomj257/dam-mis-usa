@@ -4,31 +4,24 @@ import { Pagination } from "antd";
 import NextSvg from "../../../../assets/Appointment/NextSvg";
 import { MdOutlineAccessTime, MdOutlineCheckCircle } from "react-icons/md";
 import { RxCrossCircled } from "react-icons/rx";
-import { FaPlus } from "react-icons/fa6";
 import "./TruckLocationTable.css";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import useFetch from "../../../../Hooks/useFetch";
 import Loader from "../../../../Utils/Loader";
 import GetUserName from "../../../../Utils/GetUserName";
 import ErrorCustom from "../../../../Utils/Error";
+import { useAuth } from "../../../../context/AuthContext";
 
 const TruckLocationTable = () => {
   const navigate = useNavigate();
-  const { data, loading, error } = useFetch("/transport/");
+  const [{ user }] = useAuth();
+  const { data, loading, error } = useFetch(`/transport/driver/${user?._id}`);
   const [transport, setTransports] = useState([]);
   useEffect(() => {
     setTransports(data);
   }, [data]);
   return (
     <>
-      <div className="text-end my-3">
-        <Link
-          to="/admin/truck-location/new-task"
-          className="admin-new-task-btn"
-        >
-          <FaPlus /> <span>New Task</span>{" "}
-        </Link>
-      </div>
       <div className="table_sec">
         <div
           style={{
@@ -56,7 +49,9 @@ const TruckLocationTable = () => {
                 return (
                   <tr
                     onClick={() =>
-                      navigate("/admin/truck-location/detail", { state: item })
+                      navigate("accept", {
+                        state: item,
+                      })
                     }
                     key={item?.status}
                   >
@@ -124,8 +119,8 @@ const getStatus = (status) => {
     case "in transit":
       return (
         <div
-          className="d-flex fw-semibold align-items-center gap-2"
           style={{ color: "#054857" }}
+          className="d-flex fw-semibold align-items-center gap-2 "
         >
           <MdOutlineAccessTime /> <span>{status}</span>
         </div>

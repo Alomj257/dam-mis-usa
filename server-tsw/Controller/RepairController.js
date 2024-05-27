@@ -74,6 +74,7 @@ exports.getAllappointmentsByDriver = async (req, res) => {
 };
 exports.getAllappointmentsByDriverAndStatus = async (req, res) => {
   try {
+    console.log(req.params.driverId, req.params.status);
     const repairs = await Repair.find({
       "repairRequest.driverId": req.params.driverId,
       status: req.params.status,
@@ -192,18 +193,21 @@ exports.rejectRequest = async (req, res) => {
 
 exports.repairComplete = async (req, res) => {
   try {
+    const { parts, total, extra, paid } = req.body;
     const repair = await Repair.findById(req.params.id);
     if (!repair) {
       res.status(404).json({ message: "invalid repair id" });
     }
-    repair.parts = req.body.parts;
+    repair.parts = parts;
     repair.status = "Complete";
-    const parts = req.body.parts;
     for (const part of parts) {
-      const prt = await Parts.findById(part.id);
-      prt.quantity -= part.quantity;
+      const prt = await Parts.findById(part);
+      prt.quantity -= part.quantity || 1;
       await prt.save();
     }
+    repair.totalBill = total;
+    repair.extraBill = extra;
+    repair.paid = paid;
     await repair.save();
     res.status(200).json("Your repairing done");
   } catch (error) {

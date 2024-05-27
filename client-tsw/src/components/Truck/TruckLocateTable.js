@@ -10,11 +10,12 @@ import CompleteStatusSvg from "../../assets/Appointment/CompleteStatusSvg";
 import PendingStatusSvg from "../../assets/Appointment/PendingStatusSvg";
 import InTransitSvg from "../../assets/Truck/InTransitSvg";
 import { useAuth } from "../../context/AuthContext";
-import { getTransportsByUserService } from "../../APIServices/Transport/TransportService";
+import useFetch from "../../Hooks/useFetch";
+import Loader from "../../Utils/Loader";
 
 function TruckLocateBody({ header, taskStatus }) {
   return (
-    <div style={{ width: "80%", margin: "50px" }}>
+    <div style={{ width: "90%", margin: "50px" }}>
       <Header header={header} />
       <TaskTable taskStatus={taskStatus} myData={myData} />
     </div>
@@ -51,24 +52,18 @@ function haldleStatus(s) {
 
 // for rounting problem
 function removeSpaceBetweenWords(inputString) {
-  return inputString.replace(/(\S)\s+(\S)/g, "$1$2");
+  return inputString?.replace(/(\S)\s+(\S)/g, "$1$2");
 }
 
 const TaskTable = ({ myData, taskStatus }) => {
   const statusFiltering = DataFilter(myData, taskStatus);
-  const [appointments, setAppointments] = useState([]);
-  const [auth] = useAuth();
+  const [task, setTask] = useState([]);
+  const [{ user }] = useAuth();
+  const { data, loading } = useFetch(`/transport/driver/${user?._id}`);
+  console.log(data);
   useEffect(() => {
-    const getData = async () => {
-      try {
-        const { data } = await getTransportsByUserService(auth?.user?._id);
-        setAppointments(data);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    getData();
-  }, [auth?.user?._id]);
+    setTask(data);
+  }, [data]);
   return (
     <div className="table_sec" style={{ height: "78vh" }}>
       <div
@@ -82,61 +77,62 @@ const TaskTable = ({ myData, taskStatus }) => {
           justifyContent: "space-between",
         }}
       >
-        <table>
-          <tr className="first_row">
-            <td
-              style={{
-                paddingLeft: "70px",
-              }}
-            >
-              PICKUP
-            </td>
-            <td>DROPOFF</td>
-            <td>GAIN</td>
-            <td>DATE</td>
-            <td>TIME</td>
-            <td>STATUS</td>
-          </tr>
+        {loading ? (
+          <Loader />
+        ) : (
+          <table>
+            <tr className="first_row">
+              <td
+                style={{
+                  paddingLeft: "70px",
+                }}
+              >
+                PICKUP
+              </td>
+              <td>DROPOFF</td>
+              <td>GAIN</td>
+              <td>DATE</td>
+              <td>TIME</td>
+              <td>STATUS</td>
+            </tr>
 
-          {Array.isArray(appointments)
-            ? appointments.map((item, index) => {
-                const status = haldleStatus(item?.status);
-                const s = removeSpaceBetweenWords(item?.status);
-                const href = `/truck-driver/truck-${s}-details`;
+            {Array.isArray(task)
+              ? task?.map((item, index) => {
+                  const status = haldleStatus(item?.status);
+                  const href = `/truck-driver/truck-details`;
 
-                return (
-                  <tr key={index}>
-                    <a
-                      href={href}
-                      style={{
-                        textDecoration: "none",
-                        color: "inherit",
-                        display: "block",
-                        height: "57px",
-                        paddingTop: "20px",
-                      }}
-                    >
-                      <td
+                  return (
+                    <tr key={index}>
+                      <a
+                        href="/"
                         style={{
-                          paddingLeft: "70px",
+                          textDecoration: "none",
+                          color: "inherit",
+                          display: "block",
+                          height: "57px",
+                          paddingTop: "20px",
                         }}
-                        className="rest_col"
                       >
-                        {item?.onLoad}
-                      </td>
-                    </a>
-                    <td className="rest_col">{item?.onBoard}</td>
-                    <td className="rest_col">{item?.gain}</td>
-                    <td className="rest_col">{item?.createAt}</td>
-                    <td className="rest_col">{item?.time}</td>
-                    <td className="rest_col">
-                      {item?.status[item?.status?.length - 1]}
-                    </td>
-                  </tr>
-                );
-              })
-            : ""}
-        </table>
+                        <td
+                          style={{
+                            paddingLeft: "70px",
+                          }}
+                          className="rest_col"
+                        >
+                          {item?.pickup}
+                        </td>
+                      </a>
+                      <td className="rest_col">{item?.dropoff}</td>
+                      <td className="rest_col">{item?.gain}</td>
+                      <td className="rest_col">{item?.date}</td>
+                      <td className="rest_col">{item?.time}</td>
+                      <td className="rest_col">{item?.status}</td>
+                    </tr>
+                  );
+                })
+              : ""}
+          </table>
+        )}
         <div
           className="bottom_page_div"
           style={{

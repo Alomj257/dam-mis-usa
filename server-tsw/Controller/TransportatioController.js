@@ -68,3 +68,68 @@ exports.getAllTransportByUser = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
+exports.getAllTransportByDriver = async (req, res) => {
+  try {
+    const transports = await Transportation.find({
+      assingTo: req.params.userId,
+    });
+    res.status(200).json(transports);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+exports.getAllTransportByDriverAndStatus = async (req, res) => {
+  try {
+    console.log(req.params.status);
+    const transports = await Transportation.find({
+      assingTo: req.params.userId,
+      status: req.params.status,
+    });
+    res.status(200).json(transports);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+exports.cancelTransport = async (req, res) => {
+  try {
+    const { reason, driverId } = req.body;
+    const transports = await Transportation.findById(req.params.id);
+    if (!transports) {
+      return res.status(404).json({ message: "invalid transport id" });
+    }
+    transports.status = "cancelled";
+    transports.cancel.push({ reason, driverId });
+    await transports.save();
+    res.status(200).json("cancelled task transportation");
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+exports.acceptTransport = async (req, res) => {
+  try {
+    const { longitude, latitude, driverId } = req.body;
+    const transports = await Transportation.findById(req.params.id);
+    if (!transports) {
+      return res.status(404).json({ message: "invalid transport id" });
+    }
+    transports.status = "in transit";
+    transports.accept.push({ driverId, locations: [longitude, latitude] });
+    await transports.save();
+    res.status(200).json("Accept task transportation");
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+exports.completeTransport = async (req, res) => {
+  try {
+    const transports = await Transportation.findById(req.params.id);
+    if (!transports) {
+      return res.status(404).json({ message: "invalid transport id" });
+    }
+    transports.status = "completed";
+    await transports.save();
+    res.status(200).json("Completed task transportation");
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};

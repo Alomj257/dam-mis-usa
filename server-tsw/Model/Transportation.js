@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const transportationSchema = mongoose.Schema(
+const transportationSchema = new mongoose.Schema(
   {
     userId: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
     truckNumber: { type: String, required: true },
@@ -10,7 +10,13 @@ const transportationSchema = mongoose.Schema(
     phone: Number,
     date: String,
     time: String,
-    status: Array,
+    status: {
+      type: String,
+      enum: ["pending", "in transit", "completed", "cancelled"],
+      default: "pending",
+    },
+    cancel: Array,
+    accept: Array,
   },
   { timestamps: true }
 );

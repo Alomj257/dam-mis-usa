@@ -22,8 +22,10 @@ import {
 } from "../../../APIServices/Auth/AuthService";
 import { toast } from "react-toastify";
 import "./User.css";
+import Loader from "../../../Utils/Loader";
+import ErrorCustom from "../../../Utils/Error";
 const UserTable = () => {
-  const { data, reFetch } = useFetch("/auth/users");
+  const { data, loading, error, reFetch } = useFetch("/auth/users");
   const [filtered, setFilter] = useState(data);
   const [openOptionIndex, setOpenOptionIndex] = useState(false);
   useEffect(() => {
@@ -127,6 +129,7 @@ const UserTable = () => {
             id=""
             className="border-0 px-4 fs-6  text-muted"
           >
+            <option value="">All</option>
             <option value="DRIVER">Truck Driver</option>
             <option value="MECHANICS">Mechanics</option>
             <option value="ADMIN">Admin</option>
@@ -152,68 +155,70 @@ const UserTable = () => {
               <td>Options</td>
             </tr>
 
-            {Array.isArray(filtered)
-              ? filtered?.map((item, index) => {
-                  return (
-                    <tr key={index}>
-                      <td className=" px-3 text-capitalize">{item?.name}</td>
-                      <td>{item?.email}</td>
-                      <td>{item?.phone}</td>
-                      <td>{item?.role}</td>
-                      <td className="last_col">
-                        {item?.isEnable ? "Enabled" : "Disabled"}
-                      </td>
-                      <td className="last_col position-relative text-center">
-                        {openOptionIndex === index ? (
-                          <BsX size={30} onClick={() => handleOpen(index)} />
-                        ) : (
-                          <BsThreeDotsVertical
-                            onClick={() => handleOpen(index)}
-                            size={30}
-                          />
-                        )}
-                        <ul
-                          style={{ listStyle: "none" }}
-                          className={`position-absolute bg-white shadow rounded px-0  inset-0 ${
-                            openOptionIndex === index
-                              ? "option-open"
-                              : "option-close"
-                          }`}
+            {loading ? (
+              <Loader />
+            ) : error ? (
+              <ErrorCustom name="Users" />
+            ) : Array.isArray(filtered) ? (
+              filtered?.map((item, index) => {
+                return (
+                  <tr key={index}>
+                    <td className=" px-3 text-capitalize">{item?.name}</td>
+                    <td>{item?.email}</td>
+                    <td>{item?.phone}</td>
+                    <td>{item?.role}</td>
+                    <td className="last_col">
+                      {item?.isEnable ? "Enabled" : "Disabled"}
+                    </td>
+                    <td className="last_col position-relative text-center">
+                      {openOptionIndex === index ? (
+                        <BsX size={30} onClick={() => handleOpen(index)} />
+                      ) : (
+                        <BsThreeDotsVertical
+                          onClick={() => handleOpen(index)}
+                          size={30}
+                        />
+                      )}
+                      <ul
+                        style={{ listStyle: "none" }}
+                        className={`position-absolute bg-white shadow rounded px-0  inset-0 ${
+                          openOptionIndex === index
+                            ? "option-open"
+                            : "option-close"
+                        }`}
+                      >
+                        <li
+                          style={{
+                            cursor: item?.isEnable ? "not-allowed" : "pointer",
+                          }}
+                          className="px-3 align-items-center pe-5 gap-2 d-flex p-3"
+                          onClick={() => handleEnable(item)}
                         >
-                          <li
-                            style={{
-                              cursor: item?.isEnable
-                                ? "not-allowed"
-                                : "pointer",
-                            }}
-                            className="px-3 align-items-center pe-5 gap-2 d-flex p-3"
-                            onClick={() => handleEnable(item)}
-                          >
-                            <FaUser /> Enable
-                          </li>
-                          <li
-                            style={{
-                              cursor: !item?.isEnable
-                                ? "not-allowed"
-                                : "pointer",
-                            }}
-                            onClick={() => hanldeDisableUser(item)}
-                            className="px-3 align-items-center pe-5 gap-2 d-flex p-3"
-                          >
-                            <BsBan /> Disable
-                          </li>
-                          <li
-                            onClick={() => handleDeleteUser(item?._id)}
-                            className="text-danger px-3 align-items-center pe-5 gap-2 d-flex p-3"
-                          >
-                            <BsTrash /> Delete
-                          </li>
-                        </ul>
-                      </td>
-                    </tr>
-                  );
-                })
-              : ""}
+                          <FaUser /> Enable
+                        </li>
+                        <li
+                          style={{
+                            cursor: !item?.isEnable ? "not-allowed" : "pointer",
+                          }}
+                          onClick={() => hanldeDisableUser(item)}
+                          className="px-3 align-items-center pe-5 gap-2 d-flex p-3"
+                        >
+                          <BsBan /> Disable
+                        </li>
+                        <li
+                          onClick={() => handleDeleteUser(item?._id)}
+                          className="text-danger px-3 align-items-center pe-5 gap-2 d-flex p-3"
+                        >
+                          <BsTrash /> Delete
+                        </li>
+                      </ul>
+                    </td>
+                  </tr>
+                );
+              })
+            ) : (
+              ""
+            )}
           </table>
           <div
             className="bottom_page_div"

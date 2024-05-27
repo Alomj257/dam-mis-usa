@@ -19,3 +19,6 @@ export const acceptRequestService = async (data) =>
 // accept by mech
 export const rejectRequestService = async (data) =>
   await Axios.post(`/appointment/requests/reject`, data);
+
+export const completeAppointmentsService = async (data, id) =>
+  await Axios.post(`/appointment/complete/${id}`, data);

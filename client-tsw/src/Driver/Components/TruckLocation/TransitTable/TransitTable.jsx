@@ -1,34 +1,28 @@
 import React, { useEffect, useState } from "react";
-import PrevSvg from "../../../../assets/Appointment/PrevSvg";
-import { Pagination } from "antd";
-import NextSvg from "../../../../assets/Appointment/NextSvg";
 import { MdOutlineAccessTime, MdOutlineCheckCircle } from "react-icons/md";
 import { RxCrossCircled } from "react-icons/rx";
-import { FaPlus } from "react-icons/fa6";
-import "./TruckLocationTable.css";
-import { Link, useNavigate } from "react-router-dom";
-import useFetch from "../../../../Hooks/useFetch";
-import Loader from "../../../../Utils/Loader";
+import NextSvg from "../../../../assets/Appointment/NextSvg";
+import { Pagination } from "antd";
+import PrevSvg from "../../../../assets/Appointment/PrevSvg";
 import GetUserName from "../../../../Utils/GetUserName";
 import ErrorCustom from "../../../../Utils/Error";
+import Loader from "../../../../Utils/Loader";
+import { useNavigate } from "react-router-dom";
+import useFetch from "../../../../Hooks/useFetch";
+import { useAuth } from "../../../../context/AuthContext";
 
-const TruckLocationTable = () => {
+const TransitTable = ({ status }) => {
   const navigate = useNavigate();
-  const { data, loading, error } = useFetch("/transport/");
+  const [{ user }] = useAuth();
+  const { data, loading, error } = useFetch(
+    `/transport/driver/status/${user?._id}/${status}`
+  );
   const [transport, setTransports] = useState([]);
   useEffect(() => {
     setTransports(data);
   }, [data]);
   return (
     <>
-      <div className="text-end my-3">
-        <Link
-          to="/admin/truck-location/new-task"
-          className="admin-new-task-btn"
-        >
-          <FaPlus /> <span>New Task</span>{" "}
-        </Link>
-      </div>
       <div className="table_sec">
         <div
           style={{
@@ -56,7 +50,9 @@ const TruckLocationTable = () => {
                 return (
                   <tr
                     onClick={() =>
-                      navigate("/admin/truck-location/detail", { state: item })
+                      navigate("/truck-driver/locate-transit/details", {
+                        state: item,
+                      })
                     }
                     key={item?.status}
                   >
@@ -110,7 +106,7 @@ const TruckLocationTable = () => {
   );
 };
 
-export default TruckLocationTable;
+export default TransitTable;
 
 const getStatus = (status) => {
   switch (status) {
@@ -124,8 +120,8 @@ const getStatus = (status) => {
     case "in transit":
       return (
         <div
-          className="d-flex fw-semibold align-items-center gap-2"
           style={{ color: "#054857" }}
+          className="d-flex fw-semibold align-items-center gap-2 "
         >
           <MdOutlineAccessTime /> <span>{status}</span>
         </div>

@@ -12,10 +12,12 @@ import { FaUser } from "react-icons/fa6";
 import useFetch from "../../../Hooks/useFetch";
 import AssignPop from "../AssignPop/AssignPop";
 import WorkshoName from "../../../Utils/WorkshoName";
+import Loader from "../../../Utils/Loader";
+import ErrorCustom from "../../../Utils/Error";
 const AppointmentTable = () => {
   const navigate = useNavigate();
   const [openOptionIndex, setOpenOptionIndex] = useState(false);
-  const { data } = useFetch("/appointment/");
+  const { data,loading,error } = useFetch("/appointment/");
   const [appointment, setAppointment] = useState([]);
   const [openPop, setOpenPop] = useState(false);
   const [appoint, setAppoint] = useState(null);
@@ -62,7 +64,7 @@ const AppointmentTable = () => {
               openPop={openPop}
               setPop={setOpenPop}
             />
-            {Array.isArray(appointment)
+            {loading?<Loader/>:error?<ErrorCustom name="Appointments" />: Array.isArray(appointment)
               ? appointment?.map((item, index) => {
                   const status = haldleStatus(item?.status);
                   const href = `/admin/appointment/${item?.status?.toLowerCase()}-appointment`;

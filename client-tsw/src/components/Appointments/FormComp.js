@@ -17,11 +17,12 @@ const FormComp = () => {
   };
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(appoint);
     appoint.driverId = auth?.user?._id;
     appoint.name = auth?.user?.name;
     appoint.phone = auth?.user?.phone;
     appoint.email = auth?.user?.email;
+    console.log(appoint);
+
     try {
       const { data } = await createAppointmentService(appoint);
       if (data.message) {

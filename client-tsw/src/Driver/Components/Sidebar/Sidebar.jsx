@@ -98,16 +98,16 @@ const SideBar = () => {
           >
             Truck Locate
           </h5>
-          <NavLink to="/truck-driver/truck-pending">
+          <NavLink to="/truck-driver/locate-tasks">
             <AppointmentElement
               logo={<NewTaskSvg color={"#919191"} />}
               title="New Task"
             />
           </NavLink>
-          <NavLink to="/truck-driver/truck-intransit">
+          <NavLink to="/truck-driver/locate-transit">
             <AppointmentElement logo={<InTransitSvg />} title="In Transit" />
           </NavLink>
-          <NavLink to="/truck-driver/truck-completed">
+          <NavLink to="/truck-driver/task-completed">
             <AppointmentElement logo={<CompletedSvg />} title="Completed" />
           </NavLink>
         </div>

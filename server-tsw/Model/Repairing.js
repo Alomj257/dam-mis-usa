@@ -28,6 +28,9 @@ const RepairSchema = new mongoose.Schema(
     description: String,
     location: String,
     timeSlot: String,
+    extraBill: Number,
+    totalBill: Number,
+    paid: Number,
     workshop: { type: mongoose.Types.ObjectId, ref: "workshop" },
     status: {
       type: String,

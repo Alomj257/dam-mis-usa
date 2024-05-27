@@ -11,6 +11,7 @@ import { FaPlus } from "react-icons/fa6";
 import NewWorkshop from "../NewWorkshop/NewWorkshop";
 import useFetch from "../../../../Hooks/useFetch";
 import Loader from "../../../../Utils/Loader";
+import ErrorCustom from "../../../../Utils/Error";
 
 const InventoryTable = () => {
   const navigate = useNavigate();
@@ -57,7 +58,7 @@ const InventoryTable = () => {
             {loading ? (
               <Loader />
             ) : error ? (
-              "Workshop fetching error occured"
+              <ErrorCustom name="Workshop" />
             ) : Array.isArray(workshop) ? (
               workshop?.map((item, index) => {
                 const status = haldleStatus(item?.status);

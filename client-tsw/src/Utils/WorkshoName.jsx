@@ -3,7 +3,6 @@ import useFetch from "../Hooks/useFetch";
 
 const WorkshoName = ({ id }) => {
   const { data } = useFetch(`/workshop/${id}`);
-  console.log(data);
   const [workshop, setWorkshop] = useState(data);
   useEffect(() => {
     setWorkshop(data);

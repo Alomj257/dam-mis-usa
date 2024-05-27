@@ -45,6 +45,12 @@ import InventoryDetailsPage from "./Admin/Pages copy/Inventory/InventoryDetailsP
 import AddPartsPage from "./Admin/Pages copy/Inventory/AddPartsPage";
 import UpdatePartPage from "./Admin/Pages copy/Inventory/UpdatePartPage";
 import NewWorkshopPage from "./Admin/Pages copy/Inventory/NewWorkshopPage";
+import DriverTruckLocationsPage from "./Driver/Pages/TruckLocation/TruckLocationsPage";
+import DriverTruckLocationDetails from "./Driver/Pages/TruckLocation/TruckLocationDetails";
+import AcceptNewTaskPage from "./Driver/Pages/TruckLocation/NewTaskPage";
+import AcceptFormPage from "./Driver/Pages/TruckLocation/AcceptFormPage";
+import TrasitePage from "./Driver/Pages/TruckLocation/TrasitePage";
+import TransitComplatePage from "./Driver/Pages/TruckLocation/ComplatePage";
 
 /////////////////////////////////////////////
 
@@ -89,6 +95,22 @@ function App() {
             <Route path="appointment/pending" element={<Pending />} />
             <Route path="appointment/cancelled" element={<Cancelled />} />
             <Route path="appointment/confirm" element={<Confirm />} />
+            <Route path="locate-tasks" element={<DriverTruckLocationsPage />} />
+            <Route
+              path="locate-tasks/details"
+              element={<DriverTruckLocationDetails />}
+            />
+            <Route path="locate-tasks/accept" element={<AcceptNewTaskPage />} />
+            <Route
+              path="locate-tasks/accept/transit"
+              element={<AcceptFormPage />}
+            />
+            <Route path="locate-transit" element={<TrasitePage />} />
+            <Route path="task-completed" element={<TransitComplatePage />} />
+            <Route
+              path="locate-transit/details"
+              element={<DriverTruckLocationDetails />}
+            />
           </Route>
           {/* Admin */}
           {/* <Route path="/admin/users" element={<UserPage />} /> */}
@@ -136,200 +158,12 @@ function App() {
             path="/forget-password/reset-password"
             element={<ResetPass />}
           />
-
-          {/* Appointment Pages */}
-          {/* <Route
-            path="truck-driver/appointments/Pending"
-            element={
-              <AppointmentsPage
-                page={
-                  <ApointmentStatusPage
-                    header={"Pending Appointments"}
-                    allData={myCollection}
-                    status={"Pending"}
-                  />
-                }
-              />
-            }
-          />
-          <Route
-            path="truck-driver/appointments/Confirm"
-            element={
-              <AppointmentsPage
-                page={
-                  <ApointmentStatusPage
-                    header={"Confirmed Appointments"}
-                    allData={myCollection}
-                    status={"Confirm"}
-                  />
-                }
-              />
-            }
-          />
-          <Route
-            path="truck-driver/appointments/Cancelled"
-            element={
-              <AppointmentsPage
-                page={
-                  <ApointmentStatusPage
-                    header={"Cancelled Appointments"}
-                    allData={myCollection}
-                    status={"Cancelled"}
-                  />
-                }
-              />
-            }
-          />
-          <Route
-            path="truck-driver/appointments/Complete"
-            element={
-              <AppointmentsPage
-                page={
-                  <ApointmentStatusPage
-                    header={"Completed Appointments"}
-                    allData={myCollection}
-                    status={"Complete"}
-                  />
-                }
-              />
-            }
-          />
-          <Route
-            path="truck-driver/appointments/Complete-appointment"
-            element={
-              <AppointmentsPage
-                page={<ApointStatusDetails status={"Completed"} />}
-              />
-            }
-          />
-          <Route
-            path="truck-driver/appointments/Pending-appointment"
-            element={
-              <AppointmentsPage
-                page={<ApointStatusDetails status={"Pending"} />}
-              />
-            }
-          />
-          <Route
-            path="truck-driver/appointments/Cancelled-appointment"
-            element={
-              <AppointmentsPage
-                page={<ApointStatusDetails status={"Cancelled"} />}
-              />
-            }
-          />
-          <Route
-            path="truck-driver/appointments/Confirm-appointment"
-            element={
-              <AppointmentsPage
-                page={<ApointStatusDetails status={"Confirm"} />}
-              />
-            }
-          />
-          <Route
-            path="truck-driver/appointments"
-            element={<AppointmentsPage page={<BodyComp />} />}
-          /> */}
-          {/* Truck Locate  */}
-          <Route
-            path="/truck-driver/truck-Pending"
-            element={
-              <TruckLocate
-                page={
-                  <TruckLocateTable
-                    header={"New Tasks"}
-                    taskStatus={"Pending"}
-                  />
-                }
-              />
-            }
-          />
-          <Route
-            path="/truck-driver/truck-intransit"
-            element={
-              <TruckLocate
-                page={
-                  <TruckLocateTable
-                    header={"In Transit"}
-                    taskStatus={"In Transit"}
-                  />
-                }
-              />
-            }
-          />
-          <Route
-            path="/truck-driver/truck-Completed"
-            element={
-              <TruckLocate
-                page={
-                  <TruckLocateTable
-                    header={"Completed Tasks"}
-                    taskStatus={"Completed"}
-                  />
-                }
-              />
-            }
-          />
-          {/* ///////////////// */}
-          <Route
-            path="/truck-driver/truck-Pending-details"
-            element={
-              <TruckLocate page={<TruckLocateDetails status={"Pending"} />} />
-            }
-          />
-          <Route
-            path="/truck-driver/truck-InTransit-details"
-            element={
-              <TruckLocate
-                page={<TruckLocateDetails status={"In Transit"} />}
-              />
-            }
-          />
-          <Route
-            path="/truck-driver/truck-Completed-details"
-            element={
-              <TruckLocate page={<TruckLocateDetails status={"Completed"} />} />
-            }
-          />
-          {/* Mechanics  */}
-          {/* <Route
-            path="/mechanic/Pending"
-            element={
-              <Mechanic
-                page={<TaskTable myData={myData} taskStatus={"Pending"} />}
-              />
-            }
-          /> */}
           <Route path="/mechanic" element={<MechanicsDashboard />}>
             <Route path="Pending" element={<TaskPendingPage />} />
             <Route path="InProgress" element={<TaskProgressPage />} />
             <Route path="Rejected" element={<TaskRejectPage />} />
             <Route path="Completed" element={<TaskCompletePage />} />
           </Route>
-          {/* <Route
-            path="/mechanic/Completed"
-            element={
-              <Mechanic
-                page={<TaskTable myData={myData} taskStatus={"Completed"} />}
-              />
-            }
-          />
-          <Route
-            path="/mechanic/InProgress"
-            element={
-              <Mechanic
-                page={<TaskTable myData={myData} taskStatus={"In Progress"} />}
-              />
-            }
-          />
-          <Route
-            path="/mechanic/Rejected"
-            element={
-              <Mechanic
-                page={<TaskTable myData={myData} taskStatus={"Rejected"} />}
-              />
-            }
-          /> */}
           <Route
             path="/mechanic/Cancelled-details"
             element={<Mechanic page={<TaskDetails status="Rejected" />} />}

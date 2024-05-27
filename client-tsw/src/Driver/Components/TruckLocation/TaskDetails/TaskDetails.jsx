@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import GetUserName from "../../../../Utils/GetUserName";
+import { toast } from "react-toastify";
+import { completeTaskService } from "../../../../APIServices/Transport/TransportService";
+import { useAuth } from "../../../../context/AuthContext";
 
 const TaskDetails = () => {
   const { state } = useLocation();
@@ -18,7 +21,24 @@ const TaskDetails = () => {
     const { name, value } = e.target;
     setTask({ ...task, [name]: value });
   };
-
+  const [{ user }] = useAuth();
+  const handleComplete = async (e) => {
+    e.preventDefault();
+    if (!task.accept.find((ele) => ele.driverId === user?._id)) {
+      return toast.error("your are not accepted this task");
+    }
+    try {
+      const { data } = await completeTaskService(task?._id);
+      if (data?.message) {
+        toast.error(data?.message);
+        return;
+      }
+      toast.success(data);
+    } catch (error) {
+      console.log(error);
+      toast.error(error?.response?.data?.message || error?.response?.data);
+    }
+  };
   return (
     <div className="admin-newTask mb-5">
       <h3 className="my-4 fw-semibold text-muted">Task Details</h3>
@@ -110,7 +130,11 @@ const TaskDetails = () => {
         </div>
       </form>
       <h3 className="my-4 fw-semibold text-muted">Assign To</h3>
-      <form action="" className="d-flex flex-column gap-3">
+      <form
+        onSubmit={handleComplete}
+        action=""
+        className="d-flex flex-column gap-3"
+      >
         <div className="d-flex gap-3 w-100 align-items-center">
           <div className="d-flex flex-column gap-1 w-100">
             <label htmlFor="driverName"> Driver Name</label>
@@ -208,6 +232,11 @@ const TaskDetails = () => {
           >
             <a href="https://www.gps.ie/">gps trackers</a>
           </iframe>
+        </div>
+        <div className="text-center">
+          <button type="submit" className="admin-task-save">
+            Mark Complete
+          </button>
         </div>
       </form>
     </div>
