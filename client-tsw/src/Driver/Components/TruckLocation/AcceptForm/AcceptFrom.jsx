@@ -53,6 +53,7 @@ const AcceptFrom = () => {
         return toast.error(data?.message);
       }
       toast.success(data);
+      navigate("/truck-driver/locate-transit");
     } catch (error) {
       console.log(error);
       toast.error(error?.response?.data?.message || error?.response?.data);

@@ -34,6 +34,7 @@ const TaskDetails = () => {
         return;
       }
       toast.success(data);
+      navigate("/truck-driver/task-completed");
     } catch (error) {
       console.log(error);
       toast.error(error?.response?.data?.message || error?.response?.data);
