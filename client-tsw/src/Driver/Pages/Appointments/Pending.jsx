@@ -3,11 +3,14 @@ import Navbar from "../../Components/Navbar/Navbar";
 import AppointmentTable from "../../Components/AppointmentTable/AppointmentTable";
 import { useAuth } from "../../../context/AuthContext";
 import useFetch from "../../../Hooks/useFetch";
+import Loader from "../../../Utils/Loader";
+import ErrorCustom from "../../../Utils/Error";
 
 const Pending = () => {
-  const [auth] = useAuth();
-  const { data } = useFetch(`/appointment/status/${auth?.user?._id}/Pending`);
-  console.log(auth?.user?._id);
+  const [{ user }] = useAuth();
+  const { data, error, loading } = useFetch(
+    `/appointment/driver/status/${user?._id}/Pending`
+  );
   const [appointment, setAppointment] = useState([]);
   useEffect(() => {
     setAppointment(data);
@@ -17,7 +20,13 @@ const Pending = () => {
       <Navbar title="Pending Appointments" />
 
       <div className="my-4">
-        <AppointmentTable data={appointment} />
+        {loading ? (
+          <Loader />
+        ) : error ? (
+          <ErrorCustom name="Appointment pending" />
+        ) : (
+          <AppointmentTable data={appointment} />
+        )}
       </div>
     </div>
   );

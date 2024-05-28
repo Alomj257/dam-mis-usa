@@ -1,0 +1,15 @@
+.admin-newTask  select[placeholder], .admin-newTask [placeholder] input[placeholder], .admin-newTask *[placeholder] {
+    color: black !important;
+}
+.admin-task-cancel{
+border: 2px solid red;
+padding: 8px 20px;
+background-color: transparent;
+border-radius: 6px;
+}
+.admin-task-save{
+background: #054857;
+padding: 8px 25px;
+color: white;
+border-radius: 6px;
+}

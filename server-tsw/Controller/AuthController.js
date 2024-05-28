@@ -1,6 +1,7 @@
 const jwt = require("jsonwebtoken");
 const { sendEmail } = require("../Middlewares/EmailHandle");
 const User = require("../Model/user");
+const Workshop = require("../Model/Workshop");
 
 const register = async (req, res) => {
   try {
@@ -38,7 +39,10 @@ const register = async (req, res) => {
     if (req.body.role !== "ADMIN") {
       req.body = other;
     }
-    await new User(req.body).save();
+    const newUser = await new User(req.body).save();
+    const workshop = await Workshop.findById(req.body.workshop);
+    workshop.mechanics.push(newUser?._id);
+    await workshop.save();
     res.status(201).json("your account successfully created");
   } catch (error) {
     console.log(error);
@@ -59,9 +63,37 @@ const enableUser = async (req, res) => {
     return res.status(500).json({ message: error.message });
   }
 };
+const disableUser = async (req, res) => {
+  try {
+    const user = await User.findById(req.body.id);
+    if (!user) {
+      res.status(404).json({ message: "user Id invalid" });
+    }
+    user.isEnable = false;
+    user.save();
+    res.status(200).json("user disabled successfully ");
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ message: error.message });
+  }
+};
+const deleteUser = async (req, res) => {
+  try {
+    const user = await User.findById(req.params.id);
+    if (!user) {
+      res.status(404).json({ message: "user Id invalid" });
+    }
+    await User.findByIdAndDelete(req.params.id);
+    res.status(200).json("user deleted successfully ");
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ message: error.message });
+  }
+};
 
 const forgetPassword = async (req, res) => {
   try {
+    console.log(req.body);
     const user = await User.findOne({ email: req.body.email });
     if (!user) {
       return res
@@ -71,6 +103,7 @@ const forgetPassword = async (req, res) => {
     const otp = await generateOTP();
     const otpEmail = `<p>please do not share this one time password its your responsible OTP: <strong>${otp}</strong> </p> `;
     user.otp.otp = otp;
+    console.log(user);
     user.save();
 
     await sendEmail(otpEmail, user.email, "noreply your OTP");
@@ -86,7 +119,7 @@ const verifyOtp = async (req, res) => {
       email: req.body.email,
       "otp.otp": req.body.otp,
     });
-    console.log(req.body);
+    console.log(req.body, user);
     if (!user) {
       return res.status(404).json({ message: "wrong otp" });
     }
@@ -225,4 +258,6 @@ module.exports = {
   forgetPassword,
   verifyOtp,
   updatePassword,
+  disableUser,
+  deleteUser,
 };

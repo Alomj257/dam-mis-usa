@@ -3,10 +3,11 @@ import PendingStatusSvg from "../../assets/Appointment/PendingStatusSvg";
 import CompleteStatusSvg from "../../assets/Appointment/CompleteStatusSvg";
 import CancellStatusSvg from "../../assets/Appointment/CancelStatusSvg";
 import RejectionForm from "../Popup/Popup";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useAuth } from "../../context/AuthContext";
 import { acceptRequestService } from "../../APIServices/Appointment/AppointmentService";
+import WorkshoName from "../../Utils/WorkshoName";
 
 const TaskSlot = ({ s }) => {
   if (s === "Complete") {
@@ -115,7 +116,11 @@ const StatusDetails = ({ name1, name2, t1, t2, d1, d2 }) => {
             marginTop: "-15px",
           }}
         >
-          {state[name2]}
+          {name2 === "workshop" ? (
+            <WorkshoName id={state[name2]} />
+          ) : (
+            state[name2]
+          )}
         </p>
       </div>
     </div>
@@ -458,6 +463,7 @@ const TaskFormCompleted = ({ status }) => {
 
 const TaskFormInProgress = ({ status }) => {
   const { state } = useLocation();
+  const navigate = useNavigate();
   return (
     <div style={{ marginTop: "25px" }}>
       <div style={{ width: "100%" }}>
@@ -518,6 +524,9 @@ const TaskFormInProgress = ({ status }) => {
           }}
         >
           <button
+            onClick={() =>
+              navigate("/mechanic/InProgress-CompletionForm", { state: state })
+            }
             style={{
               backgroundColor: "#054857",
               borderRadius: "6px",

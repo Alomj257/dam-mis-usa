@@ -68,3 +68,11 @@ exports.getAllparts = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
+exports.getAllpartsByWorkshopId = async (req, res) => {
+  try {
+    const parts = await Parts.find({ workshopId: req.params.workshopId });
+    res.status(201).json(parts);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};

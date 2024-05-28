@@ -45,7 +45,8 @@ const AppoimentTable = () => {
                         item?.isEnable ? "success" : "primary"
                       }`}
                     >
-                      {item?.status !== "Pending" ? " Assgined" : " Assgin"}
+                      {item?.status !== "Pending" ? " Assgined" : " Assgin"}{" "}
+                      Mechanics
                     </button>
                     <AssignPop
                       appointment={appoint}

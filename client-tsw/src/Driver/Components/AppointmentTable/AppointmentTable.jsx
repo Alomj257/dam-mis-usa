@@ -1,5 +1,4 @@
 import React from "react";
-import myCollection from "../../../myCollection";
 import PrevSvg from "../../../assets/Appointment/PrevSvg";
 import { Pagination } from "antd";
 import NextSvg from "../../../assets/Appointment/NextSvg";
@@ -8,6 +7,7 @@ import CancelStatusSvg from "../../../assets/Appointment/CancelStatusSvg";
 import PendingStatusSvg from "../../../assets/Appointment/PendingStatusSvg";
 import ConfirmStatusSvg from "../../../assets/Appointment/ConfirmStatusSvg";
 import { useNavigate } from "react-router-dom";
+import WorkshoName from "../../../Utils/WorkshoName";
 const AppointmentTable = ({ data }) => {
   const navigate = useNavigate();
   return (
@@ -60,7 +60,9 @@ const AppointmentTable = ({ data }) => {
                             : item?.description}
                         </button>
                       </td>
-                      <td className="rest_col">{item?.workshop}</td>
+                      <td className="rest_col">
+                        <WorkshoName id={item?.workshop} />
+                      </td>
                       <td className="rest_col">{item?.location}</td>
                       <td className="rest_col">{item?.timeSlot}</td>
                       <td className="last_col">{status}</td>

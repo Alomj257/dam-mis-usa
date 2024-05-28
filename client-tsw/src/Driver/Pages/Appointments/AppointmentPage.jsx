@@ -4,9 +4,13 @@ import Navbar from "../../Components/Navbar/Navbar";
 import AppointmentTable from "../../Components/AppointmentTable/AppointmentTable";
 import { Link } from "react-router-dom";
 import useFetch from "../../../Hooks/useFetch";
+import { useAuth } from "../../../context/AuthContext";
+import Loader from "../../../Utils/Loader";
+import ErrorCustom from "../../../Utils/Error";
 
 const AppointmentPage = () => {
-  const { data } = useFetch("/appointment/");
+  const [{ user }] = useAuth();
+  const { data, loading, error } = useFetch(`/appointment/driver/${user?._id}`);
   const [appointment, setAppointment] = useState([]);
   useEffect(() => {
     setAppointment(data);
@@ -34,7 +38,13 @@ const AppointmentPage = () => {
         </Link>
       </div>
       <div className="my-4">
-        <AppointmentTable data={appointment} />
+        {loading ? (
+          <Loader />
+        ) : error ? (
+          <ErrorCustom name="Appointments" />
+        ) : (
+          <AppointmentTable data={appointment} />
+        )}
       </div>
     </>
   );

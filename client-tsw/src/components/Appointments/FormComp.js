@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { createAppointmentService } from "../../APIServices/Appointment/AppointmentService";
 import { useAuth } from "../../context/AuthContext";
+import useFetch from "../../Hooks/useFetch";
 
 const FormComp = () => {
   const [appoint, setAppoint] = useState(null);
@@ -16,11 +17,12 @@ const FormComp = () => {
   };
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(appoint);
     appoint.driverId = auth?.user?._id;
     appoint.name = auth?.user?.name;
     appoint.phone = auth?.user?.phone;
     appoint.email = auth?.user?.email;
+    console.log(appoint);
+
     try {
       const { data } = await createAppointmentService(appoint);
       if (data.message) {
@@ -247,6 +249,11 @@ const DoubleInput = ({
 };
 
 const DoubleSelect = ({ name1, name2, title1, title2, handleChange }) => {
+  const { data } = useFetch("/workshop/");
+  const [workshop, setWorkshop] = useState([]);
+  useEffect(() => {
+    setWorkshop(data);
+  }, [data]);
   return (
     <div style={{ display: "flex", width: "100%", marginTop: "10px" }}>
       <div style={{ width: "50%" }}>
@@ -273,9 +280,15 @@ const DoubleSelect = ({ name1, name2, title1, title2, handleChange }) => {
           }}
         >
           <option value="">Select Location</option>
-          <option value="">1</option>
-          <option value="">2</option>
-          <option value="">3</option>
+          {workshop?.map((val, key) => (
+            <option
+              className="text-capitalize"
+              key={val?._id}
+              value={val?.location}
+            >
+              {val?.location}
+            </option>
+          ))}
         </select>
       </div>
       <div style={{ width: "50%" }}>
@@ -302,9 +315,11 @@ const DoubleSelect = ({ name1, name2, title1, title2, handleChange }) => {
           }}
         >
           <option value="">Select Workshop</option>
-          <option value="">1</option>
-          <option value="">2</option>
-          <option value="">3</option>
+          {workshop?.map((val, key) => (
+            <option className="text-capitalize" key={val?._id} value={val?._id}>
+              {val?.workshop}
+            </option>
+          ))}
         </select>
       </div>
     </div>

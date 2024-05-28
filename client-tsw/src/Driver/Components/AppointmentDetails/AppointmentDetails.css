@@ -1,5 +1,15 @@
-.appointment-details  select[placeholder], .appointment-details
-[placeholder] input[placeholder],
+.appointment-details  select[placeholder], .appointment-details .appointment-details
+[placeholder] input[placeholder],.appointment-details
 *[placeholder] {
   color: black !important;
+}
+
+
+.appointment-details .appoinment-edit{
+border-radius: 6px;
+  padding: 10px 50px;
+  background: #054857;
+  color: white;
+  margin-right: 3.4rem;
+  font-weight: 400;
 }

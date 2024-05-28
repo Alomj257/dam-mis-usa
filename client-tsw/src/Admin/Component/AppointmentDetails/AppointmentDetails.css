@@ -1,0 +1,5 @@
+.appointment-details  select[placeholder], .appointment-details
+[placeholder] input[placeholder],
+*[placeholder] {
+  color: black !important;
+}

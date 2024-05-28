@@ -1,0 +1,18 @@
+.admin-add-parts  select[placeholder], .admin-add-parts [placeholder] input[placeholder], .admin-add-parts *[placeholder] {
+    color: black !important;
+}
+.admin-add-parts input::placeholder{
+    color: #054857;
+}
+.admin-part-cancel{
+border: 2px solid red;
+padding: 8px 20px;
+background-color: transparent;
+border-radius: 6px;
+}
+.admin-part-save{
+background: #054857;
+padding: 8px 25px;
+color: white;
+border-radius: 6px;
+}

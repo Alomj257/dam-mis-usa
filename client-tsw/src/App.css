@@ -20,3 +20,11 @@
 *[placeholder] {
   color: black !important;
 }
+
+.ant-switch-checked {
+  background-color: orange !important;
+}
+
+a{
+  text-decoration: none !important;
+}

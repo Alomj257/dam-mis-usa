@@ -8,7 +8,7 @@ const useFetch = (url) => {
     setloading(true);
     try {
       const res = await Axios.get(url);
-      console.log(res);
+      // console.log(res);
       setdata(res.data);
     } catch (error) {
       console.log(error);
@@ -25,7 +25,7 @@ const useFetch = (url) => {
     setloading(true);
     try {
       const res = await Axios.get(url);
-      console.log(res);
+      // console.log(res);
       setdata(res.data);
     } catch (error) {
       seterror(error);

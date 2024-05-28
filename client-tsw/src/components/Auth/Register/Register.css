@@ -169,3 +169,8 @@ h5,
   width: 100% !important;
   row-gap: 10px;
 }
+.register select option{
+  color: white;
+  padding: 6px 5px;
+  cursor: pointer;
+}

@@ -51,7 +51,7 @@ const SideBar = () => {
           >
             Book Apointment
           </h5>
-          <a href="/truck-driver/appointments">
+          <a href="/truck-driver/appointment">
             <AppointmentElement
               logo={<NewTaskSvg color={"#919191"} />}
               title="Book Appointment"
@@ -71,16 +71,16 @@ const SideBar = () => {
           >
             Appointments
           </h5>
-          <a href="/truck-driver/appointments/Pending">
+          <a href="/truck-driver/appointment/Pending">
             <AppointmentElement logo={<PendingSvg />} title="Pending" />
           </a>
-          <a href="/truck-driver/appointments/Cancelled">
+          <a href="/truck-driver/appointment/Cancelled">
             <AppointmentElement logo={<CancelledSvg />} title="Cancelled" />
           </a>
-          <a href="/truck-driver/appointments/Confirm">
+          <a href="/truck-driver/appointment/Confirm">
             <AppointmentElement logo={<ConfirmSvg />} title="Confirm" />
           </a>
-          <a href="/truck-driver/appointments/Complete">
+          <a href="/truck-driver/appointment/Complete">
             <AppointmentElement logo={<CompletedSvg />} title="Complete" />
           </a>
         </div>

@@ -1,9 +1,13 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Header from "./Header_Mechanic";
 import HomeSvg from "../../assets/Appointment/HomeSvg";
 import NextIconSvg from "../../assets/Appointment/NextIconSvg";
-import TaskDetails from "./DetailsPageMechanic";
-import TaskSlot from "../Mechanic/TaskSlot";
+import { useLocation, useNavigate } from "react-router-dom";
+import useFetch from "../../Hooks/useFetch";
+import Loader from "../../Utils/Loader";
+import ErrorCustom from "../../Utils/Error";
+import { completeAppointmentsService } from "../../APIServices/Appointment/AppointmentService";
+import { toast } from "react-toastify";
 
 function CompletionForm({ status }) {
   return (
@@ -65,6 +69,33 @@ const Completion = () => {
     "Brakes",
     "Radiator",
   ];
+  const { state } = useLocation();
+  const { data, loading, error } = useFetch(
+    `/parts/workshop/${state?.workshop}`
+  );
+  const [part, setPart] = useState([]);
+  const [total, setTotal] = useState(0);
+  const [parts, setParts] = useState([]);
+  const [extra, setExtra] = useState(0);
+  const [paid, setPaid] = useState(0);
+  useEffect(() => {
+    setPart(data);
+  }, [data]);
+  const navigate = useNavigate();
+  const handleComplete = async () => {
+    const details = { total, paid, extra, parts };
+    try {
+      const { data } = await completeAppointmentsService(details, state?._id);
+      if (data?.message) {
+        return toast.error(data?.message);
+      }
+      toast.success(data);
+      navigate("/mechanic/Completed");
+    } catch (error) {
+      console.log(error);
+      toast.error(error?.response?.data?.message || error?.response?.data);
+    }
+  };
   return (
     <div style={{ marginTop: "25px" }}>
       <div style={{ width: "100%" }}>
@@ -73,20 +104,40 @@ const Completion = () => {
 
       <div style={{ width: "106%", marginTop: "10px" }}>
         <p style={{ fontWeight: "500" }}>Parts Fixed</p>
-
-        <div
-          style={{
-            width: "90%",
-            display: "flex",
-            justifyContent: "space-between",
-            flexWrap: "wrap",
-          }}
-        >
-          <Check arr={arr} />
-        </div>
+        {loading ? (
+          <Loader />
+        ) : error ? (
+          <ErrorCustom />
+        ) : (
+          <div
+            style={{
+              width: "90%",
+              display: "flex",
+              justifyContent: "space-between",
+              flexWrap: "wrap",
+            }}
+          >
+            <Check
+              setParts={setParts}
+              total={total}
+              parts={parts}
+              setTotal={setTotal}
+              arr={part}
+            />
+          </div>
+        )}
       </div>
 
-      <StatusDetails t1={"Extras"} t2={"Total Bill"} t3={"Bill Paid"} />
+      <StatusDetails
+        extra={extra}
+        total={total}
+        paid={paid}
+        setPaid={setPaid}
+        setExtra={setExtra}
+        t1={"Extras"}
+        t2={"Total Bill"}
+        t3={"Bill Paid"}
+      />
       <div
         style={{
           height: "25vh",
@@ -97,6 +148,7 @@ const Completion = () => {
         }}
       >
         <button
+          onClick={() => navigate(-1)}
           style={{
             backgroundColor: "transparent",
             borderRadius: "6px",
@@ -111,6 +163,7 @@ const Completion = () => {
           Cancel
         </button>
         <button
+          onClick={() => handleComplete()}
           style={{
             backgroundColor: "#054857",
             borderRadius: "6px",
@@ -128,7 +181,16 @@ const Completion = () => {
   );
 };
 
-const StatusDetails = ({ t1, t2, t3 }) => {
+const StatusDetails = ({
+  total,
+  setPaid,
+  setExtra,
+  paid,
+  extra,
+  t1,
+  t2,
+  t3,
+}) => {
   return (
     <>
       <div>
@@ -144,7 +206,9 @@ const StatusDetails = ({ t1, t2, t3 }) => {
         </p>
         <input
           type="text"
-          placeholder={"Enter" + " " + t1}
+          placeholder={"Enter " + t1}
+          value={extra}
+          onChange={(e) => setExtra(e.target.value)}
           style={{
             width: "95%",
             border: "1px solid rgba(208, 213, 221, 1)",
@@ -169,6 +233,8 @@ const StatusDetails = ({ t1, t2, t3 }) => {
           </p>
           <input
             type="text"
+            disabled
+            value={total + (parseInt(extra) || 0)}
             placeholder={"Enter Amount"}
             style={{
               width: "90%",
@@ -192,6 +258,8 @@ const StatusDetails = ({ t1, t2, t3 }) => {
           </p>
           <input
             type="text"
+            onChange={(e) => setPaid(e.target.value)}
+            value={paid}
             placeholder={"Enter Amount"}
             style={{
               width: "90%",
@@ -208,42 +276,49 @@ const StatusDetails = ({ t1, t2, t3 }) => {
   );
 };
 
-const Check = ({ arr }) => {
-  const [isChecked, setIsChecked] = useState(false);
-
-  const handleCheckboxChange = (event) => {
-    setIsChecked(event.target.checked);
+const Check = ({ arr, parts, total, setParts, setTotal }) => {
+  const handleCheckboxChange = (e) => {
+    const { value, checked } = e.target;
+    const price = parseFloat(arr?.find((ele) => ele?._id === value).price || 0);
+    if (checked) {
+      setParts((prevParts) => [...prevParts, value]);
+      setTotal((prevTotal) => prevTotal + price);
+    } else {
+      setParts((prevParts) => prevParts.filter((part) => part !== value));
+      setTotal((prevTotal) => prevTotal - price);
+    }
   };
-
   return (
     <>
-      {arr.map((e, i) => (
-        <label
-          key={i}
-          style={{
-            display: "flex",
-            alignItems: "center",
-            margin: "60px",
-            marginTop: "-20px",
-          }}
-        >
-          <input
-            type="checkbox"
-            checked={isChecked}
-            onChange={handleCheckboxChange}
-          />
-          <span
-            style={{
-              fontSize: "14px",
-              fontWeight: "400",
-              marginLeft: "10px",
-              marginRight: "10px",
-            }}
-          >
-            {e}
-          </span>
-        </label>
-      ))}
+      {Array.isArray(arr)
+        ? arr.map((val, i) => (
+            <label
+              key={i}
+              style={{
+                display: "flex",
+                alignItems: "center",
+                margin: "60px",
+                marginTop: "-20px",
+              }}
+            >
+              <input
+                type="checkbox"
+                value={val?._id}
+                onChange={handleCheckboxChange}
+              />
+              <span
+                style={{
+                  fontSize: "14px",
+                  fontWeight: "400",
+                  marginLeft: "10px",
+                  marginRight: "10px",
+                }}
+              >
+                {val?.partName}
+              </span>
+            </label>
+          ))
+        : ""}
     </>
   );
 };
