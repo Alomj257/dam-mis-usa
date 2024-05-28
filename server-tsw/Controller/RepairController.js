@@ -64,31 +64,61 @@ exports.getById = async (req, res) => {
 };
 exports.getAllappointmentsByDriver = async (req, res) => {
   try {
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
     const repairs = await Repair.find({
       "repairRequest.driverId": req.params.driverId,
+    })
+      .skip((page - 1) * limit)
+      .limit(limit || 99999);
+    const total = await Repair.countDocuments();
+    res.status(200).json({
+      total,
+      page,
+      totalPages: Math.ceil(total / limit),
+      appointments: repairs,
     });
-    res.status(200).json(repairs);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 };
 exports.getAllappointmentsByDriverAndStatus = async (req, res) => {
   try {
-    console.log(req.params.driverId, req.params.status);
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
     const repairs = await Repair.find({
       "repairRequest.driverId": req.params.driverId,
       status: req.params.status,
+    })
+      .skip((page - 1) * limit)
+      .limit(limit || 99999);
+    const total = await Repair.countDocuments();
+    res.status(200).json({
+      total,
+      page,
+      totalPages: Math.ceil(total / limit),
+      appointments: repairs,
     });
-    console.log(repairs);
-    res.status(200).json(repairs);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 };
 exports.getAllRepairs = async (req, res) => {
   try {
-    const repairs = await Repair.find();
-    res.status(201).json(repairs);
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
+
+    const repairs = await Repair.find()
+      .skip((page - 1) * limit)
+      .limit(limit || 9999);
+
+    const total = await Repair.countDocuments();
+    res.status(201).json({
+      total,
+      page,
+      totalPages: Math.ceil(total / limit),
+      appointments: repairs,
+    });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
@@ -113,14 +143,24 @@ exports.assginRepairToMechanics = async (req, res) => {
 };
 exports.getAllAssignMechanics = async (req, res) => {
   try {
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
     // console.log(req.params.mechanicsId);
     const repairs = await Repair.find({
       "repairRequest.isAssign": true,
       "acceptRepairRequest.isAccept": false,
       "repairRequest.mechanicsId": req.params.mechanicsId,
-    });
+    })
+      .skip((page - 1) * limit)
+      .limit(limit || 9999);
+    const total = await Repair.countDocuments();
 
-    res.status(200).json(repairs);
+    res.status(200).json({
+      total,
+      page,
+      totalPages: Math.ceil(total / limit),
+      appointments: repairs,
+    });
   } catch (error) {
     console.log(error);
     res.status(500).json({ message: error.message });
@@ -128,13 +168,22 @@ exports.getAllAssignMechanics = async (req, res) => {
 };
 exports.getAllAppoinmentsByStatus = async (req, res) => {
   try {
-    // console.log(req.params.mechanicsId);
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
     const repairs = await Repair.find({
       status: req.params.status,
       "repairRequest.mechanicsId": req.params.mechanicsId,
-    });
+    })
+      .skip((page - 1) * limit)
+      .limit(limit || 9999);
+    const total = await Repair.countDocuments();
 
-    res.status(200).json(repairs);
+    res.status(200).json({
+      total,
+      page,
+      totalPages: Math.ceil(total / limit),
+      appointments: repairs,
+    });
   } catch (error) {
     console.log(error);
     res.status(500).json({ message: error.message });

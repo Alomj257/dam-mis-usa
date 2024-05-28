@@ -54,8 +54,17 @@ exports.getById = async (req, res) => {
 };
 exports.getAllworkshops = async (req, res) => {
   try {
-    const workshops = await Workshop.find();
-    res.status(201).json(workshops);
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
+
+    const workshops = await Workshop.find()
+      .skip((page - 1) * limit)
+      .limit(limit || 9999);
+    const total = await Workshop.countDocuments();
+
+    res
+      .status(201)
+      .json({ total, page, totalPages: Math.ceil(total / limit), workshops });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }

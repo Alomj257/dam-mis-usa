@@ -9,21 +9,40 @@ import ConfirmStatusSvg from "../../../assets/Appointment/ConfirmStatusSvg";
 import { useNavigate } from "react-router-dom";
 import { BsThreeDotsVertical, BsX } from "react-icons/bs";
 import { FaUser } from "react-icons/fa6";
-import useFetch from "../../../Hooks/useFetch";
 import AssignPop from "../AssignPop/AssignPop";
 import WorkshoName from "../../../Utils/WorkshoName";
 import Loader from "../../../Utils/Loader";
 import ErrorCustom from "../../../Utils/Error";
+import Axios from "../../../APIServices/Axios";
 const AppointmentTable = () => {
   const navigate = useNavigate();
   const [openOptionIndex, setOpenOptionIndex] = useState(false);
-  const { data,loading,error } = useFetch("/appointment/");
+  // const { data, loading, error } = useFetch("/appointment/");
   const [appointment, setAppointment] = useState([]);
   const [openPop, setOpenPop] = useState(false);
   const [appoint, setAppoint] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const [totalPage, setTotalPages] = useState(0);
+  const getAppointment = async (page, query) => {
+    setLoading(true);
+    setError(null);
+    try {
+      const response = await Axios.get("/appointment/", {
+        params: { page, query, limit: 10 },
+      });
+      setAppointment(response.data.appointments);
+      setTotalPages(response.data.totalPages);
+      setLoading(false);
+    } catch (error) {
+      setError(error);
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
-    setAppointment(data);
-  }, [data]);
+    getAppointment();
+  }, []);
   const handleOpen = (index) => {
     setOpenOptionIndex(index === openOptionIndex ? null : index);
   };
@@ -31,7 +50,9 @@ const AppointmentTable = () => {
     setOpenPop(true);
     setAppoint(item);
   };
-
+  const handlePageNumber = (page) => {
+    getAppointment(page);
+  };
   return (
     <>
       <div className="table_sec">
@@ -64,72 +85,74 @@ const AppointmentTable = () => {
               openPop={openPop}
               setPop={setOpenPop}
             />
-            {loading?<Loader/>:error?<ErrorCustom name="Appointments" />: Array.isArray(appointment)
-              ? appointment?.map((item, index) => {
-                  const status = haldleStatus(item?.status);
-                  const href = `/admin/appointment/${item?.status?.toLowerCase()}-appointment`;
-                  return (
-                    <tr key={item?.status}>
-                      <td
-                        style={{
-                          padding: "20px",
-                          width: "40%",
-                        }}
-                        className="first_col"
+            {loading ? (
+              <Loader />
+            ) : error ? (
+              <ErrorCustom name="Appointments" />
+            ) : Array.isArray(appointment) ? (
+              appointment?.map((item, index) => {
+                const status = haldleStatus(item?.status);
+                const href = `/admin/appointment/${item?.status?.toLowerCase()}-appointment`;
+                return (
+                  <tr key={item?.status}>
+                    <td
+                      style={{
+                        padding: "20px",
+                        width: "40%",
+                      }}
+                      className="first_col"
+                    >
+                      <button
+                        className="bg-transparent border-0"
+                        onClick={() => navigate(href, { state: item })}
+                        style={{ textDecoration: "none", color: "inherit" }}
                       >
-                        <button
-                          className="bg-transparent border-0"
-                          onClick={() => navigate(href, { state: item })}
-                          style={{ textDecoration: "none", color: "inherit" }}
+                        {item?.description?.length > 47
+                          ? item?.description?.slice(0, 44) + "...."
+                          : item?.description}
+                      </button>
+                    </td>
+                    <td className="rest_col">
+                      <WorkshoName id={item?.workshop} />
+                    </td>
+                    <td className="rest_col">{item?.location}</td>
+                    <td className="rest_col">{item?.timeSlot}</td>
+                    <td className="last_col">{status}</td>
+                    <td className="last_col position-relative text-center">
+                      {openOptionIndex === index ? (
+                        <BsX size={30} onClick={() => handleOpen(index)} />
+                      ) : (
+                        <BsThreeDotsVertical
+                          onClick={() => handleOpen(index)}
+                          size={30}
+                        />
+                      )}
+                      <ul
+                        style={{ listStyle: "none", left: "-6rem" }}
+                        className={`position-absolute bg-white shadow rounded px-0  inset-0 ${
+                          openOptionIndex === index
+                            ? "option-open"
+                            : "option-close"
+                        }`}
+                      >
+                        <li
+                          onClick={() => handleAssign(item)}
+                          style={{
+                            cursor: item?.isEnable ? "not-allowed" : "pointer",
+                          }}
+                          className="px-3 align-items-center pe-5 gap-2 d-flex p-3"
                         >
-                          {item?.description?.length > 47
-                            ? item?.description?.slice(0, 44) + "...."
-                            : item?.description}
-                        </button>
-                      </td>
-                      <td className="rest_col">
-                        <WorkshoName id={item?.workshop} />
-                      </td>
-                      <td className="rest_col">{item?.location}</td>
-                      <td className="rest_col">{item?.timeSlot}</td>
-                      <td className="last_col">{status}</td>
-                      <td className="last_col position-relative text-center">
-                        {openOptionIndex === index ? (
-                          <BsX size={30} onClick={() => handleOpen(index)} />
-                        ) : (
-                          <BsThreeDotsVertical
-                            onClick={() => handleOpen(index)}
-                            size={30}
-                          />
-                        )}
-                        <ul
-                          style={{ listStyle: "none", left: "-6rem" }}
-                          className={`position-absolute bg-white shadow rounded px-0  inset-0 ${
-                            openOptionIndex === index
-                              ? "option-open"
-                              : "option-close"
-                          }`}
-                        >
-                          <li
-                            onClick={() => handleAssign(item)}
-                            style={{
-                              cursor: item?.isEnable
-                                ? "not-allowed"
-                                : "pointer",
-                            }}
-                            className="px-3 align-items-center pe-5 gap-2 d-flex p-3"
-                          >
-                            <FaUser />{" "}
-                            {item?.status !== "Pending"
-                              ? " Assgined"
-                              : " Assgin"}
-                          </li>
-                        </ul>
-                      </td>
-                    </tr>
-                  );
-                })
-              : ""}
+                          <FaUser />{" "}
+                          {item?.status !== "Pending" ? " Assgined" : " Assgin"}
+                        </li>
+                      </ul>
+                    </td>
+                  </tr>
+                );
+              })
+            ) : (
+              ""
+            )}
           </table>
           <div
             className="bottom_page_div"
@@ -147,8 +170,9 @@ const AppointmentTable = () => {
             <div style={{ display: "flex", alignItems: "center" }}>
               <Pagination
                 defaultCurrent={1}
-                total={100}
+                total={totalPage * 10}
                 showSizeChanger={false}
+                onChange={handlePageNumber}
                 theme={{
                   token: {
                     colorBorder: "rgba(225, 242, 246, 1)",

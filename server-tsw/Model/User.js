@@ -68,12 +68,13 @@ userSchema.methods.comparedPassword = async function (password) {
 const User = mongoose.model("User", userSchema);
 module.exports = User;
 
-// "email":"admin@gmail.com",
-// "password":"admin",
+// "email":"workshop2@gmail.com",
+// "password":"12345",
 
-// "email":"mech@gmail.com",
-// "password":"mech",
+// Mechanics
+// "email":"dileho3424@cgbird.com",
+// "password":"12345",
 
-//  deriver
-// kokijof943@lucvu.com
-// Password :"Kokijof943@"
+//  driver
+// senipij356@fincainc.com
+// Password :"12345"

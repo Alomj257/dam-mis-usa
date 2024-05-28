@@ -12,17 +12,40 @@ import NewWorkshop from "../NewWorkshop/NewWorkshop";
 import useFetch from "../../../../Hooks/useFetch";
 import Loader from "../../../../Utils/Loader";
 import ErrorCustom from "../../../../Utils/Error";
+import Axios from "../../../../APIServices/Axios";
 
 const InventoryTable = () => {
   const navigate = useNavigate();
   const [openPop, setOpenPop] = useState(false);
   const [workshop, setWorkshop] = useState([]);
-  const { data, reFetch, loading, error } = useFetch("/workshop/");
+  // const { data, reFetch, loading, error } = useFetch("/workshop/");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const [totalPage, setTotalPages] = useState(0);
+  const getWorkshop = async (page, query) => {
+    setLoading(true);
+    setError(null);
+    try {
+      const response = await Axios.get("/workshop/", {
+        params: { page, query, limit: 10 },
+      });
+      console.log(response);
+      setWorkshop(response.data.workshops);
+      setTotalPages(response.data.totalPages);
+      setLoading(false);
+    } catch (error) {
+      setError(error);
+      setLoading(false);
+    }
+  };
   useEffect(() => {
-    setWorkshop(data);
-  }, [data]);
+    getWorkshop();
+  }, []);
   const onAdd = () => {
-    reFetch();
+    getWorkshop();
+  };
+  const handlePage = (page) => {
+    getWorkshop(page);
   };
   return (
     <>
@@ -99,7 +122,8 @@ const InventoryTable = () => {
             <div style={{ display: "flex", alignItems: "center" }}>
               <Pagination
                 defaultCurrent={1}
-                total={100}
+                total={totalPage * 10}
+                onChange={handlePage}
                 showSizeChanger={false}
                 theme={{
                   token: {

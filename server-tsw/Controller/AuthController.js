@@ -190,8 +190,24 @@ const login = async (req, res) => {
 
 const getAllUsers = async (req, res) => {
   try {
-    const users = await User.find();
-    res.status(200).json(users);
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
+    const search = req.query.search || "";
+    const query = {
+      $or: [
+        { name: { $regex: search, $options: "i" } },
+        { role: { $regex: search, $options: "i" } },
+        { email: { $regex: search, $options: "i" } },
+      ],
+    };
+    const users = await User.find(query)
+      .skip((page - 1) * limit)
+      .limit(limit || 99999);
+    const total = await User.countDocuments();
+
+    res
+      .status(200)
+      .json({ total, page, totalPages: Math.ceil(total / limit), users });
   } catch (error) {
     console.log(error);
     res.status(500).json({ message: error.message });

@@ -3,18 +3,40 @@ import NewTaskSvg from "../../../assets/Appointment/NewTask";
 import Navbar from "../../Components/Navbar/Navbar";
 import AppointmentTable from "../../Components/AppointmentTable/AppointmentTable";
 import { Link } from "react-router-dom";
-import useFetch from "../../../Hooks/useFetch";
 import { useAuth } from "../../../context/AuthContext";
 import Loader from "../../../Utils/Loader";
 import ErrorCustom from "../../../Utils/Error";
+import Axios from "../../../APIServices/Axios";
 
 const AppointmentPage = () => {
   const [{ user }] = useAuth();
-  const { data, loading, error } = useFetch(`/appointment/driver/${user?._id}`);
+  // const { data, loading, error } = useFetch(`/appointment/driver/${user?._id}`);
   const [appointment, setAppointment] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const [totalPage, setTotalPages] = useState(0);
+  const getAppointment = async (page, query) => {
+    setLoading(true);
+    setError(null);
+    try {
+      const response = await Axios.get(`/appointment/driver/${user?._id}`, {
+        params: { page, query, limit: 10 },
+      });
+      setAppointment(response.data.appointments);
+      setTotalPages(response.data.totalPages);
+      setLoading(false);
+    } catch (error) {
+      setError(error);
+      setLoading(false);
+    }
+  };
   useEffect(() => {
-    setAppointment(data);
-  }, [data]);
+    getAppointment();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+  const handlePage = (page) => {
+    getAppointment(page);
+  };
   return (
     <>
       <Navbar title="Appointments" />
@@ -43,7 +65,11 @@ const AppointmentPage = () => {
         ) : error ? (
           <ErrorCustom name="Appointments" />
         ) : (
-          <AppointmentTable data={appointment} />
+          <AppointmentTable
+            handlePage={handlePage}
+            totalPage={totalPage}
+            data={appointment}
+          />
         )}
       </div>
     </>

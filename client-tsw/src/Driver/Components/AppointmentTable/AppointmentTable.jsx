@@ -8,7 +8,7 @@ import PendingStatusSvg from "../../../assets/Appointment/PendingStatusSvg";
 import ConfirmStatusSvg from "../../../assets/Appointment/ConfirmStatusSvg";
 import { useNavigate } from "react-router-dom";
 import WorkshoName from "../../../Utils/WorkshoName";
-const AppointmentTable = ({ data }) => {
+const AppointmentTable = ({ data, totalPage, handlePage }) => {
   const navigate = useNavigate();
   return (
     <>
@@ -87,7 +87,8 @@ const AppointmentTable = ({ data }) => {
             <div style={{ display: "flex", alignItems: "center" }}>
               <Pagination
                 defaultCurrent={1}
-                total={100}
+                total={totalPage * 10}
+                onChange={handlePage}
                 showSizeChanger={false}
                 theme={{
                   token: {

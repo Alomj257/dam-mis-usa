@@ -337,8 +337,8 @@ const Mechanic = ({ handleUserChange, fileName }) => {
   const { data } = useFetch("/workshop/");
   const [workshop, setWorkshop] = useState([]);
   useEffect(() => {
-    setWorkshop(data);
-  }, [data]);
+    setWorkshop(data?.workshops);
+  }, [data?.workshops]);
   return (
     <>
       <div class="group">

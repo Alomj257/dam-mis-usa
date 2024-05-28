@@ -14,7 +14,7 @@ function removeSpaceBetweenWords(inputString) {
   return inputString.replace(/(\S)\s+(\S)/g, "$1$2");
 }
 
-const TaskTable = ({ myData, taskStatus }) => {
+const TaskTable = ({ myData, taskStatus, handlePage, totalPage }) => {
   if (taskStatus === "In Progress") {
     taskStatus = "Confirm";
   }
@@ -104,7 +104,8 @@ const TaskTable = ({ myData, taskStatus }) => {
             <div style={{ display: "flex", alignItems: "center" }}>
               <Pagination
                 defaultCurrent={1}
-                total={100}
+                total={totalPage * 10}
+                onChange={handlePage}
                 showSizeChanger={false}
               />
             </div>

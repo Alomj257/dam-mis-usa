@@ -7,18 +7,39 @@ import { RxCrossCircled } from "react-icons/rx";
 import { FaPlus } from "react-icons/fa6";
 import "./TruckLocationTable.css";
 import { Link, useNavigate } from "react-router-dom";
-import useFetch from "../../../../Hooks/useFetch";
 import Loader from "../../../../Utils/Loader";
 import GetUserName from "../../../../Utils/GetUserName";
 import ErrorCustom from "../../../../Utils/Error";
+import Axios from "../../../../APIServices/Axios";
 
 const TruckLocationTable = () => {
   const navigate = useNavigate();
-  const { data, loading, error } = useFetch("/transport/");
+  // const { data, loading, error } = useFetch("/transport/");
   const [transport, setTransports] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const [totalPage, setTotalPages] = useState(0);
+  const getTask = async (page, query) => {
+    setLoading(true);
+    setError(null);
+    try {
+      const response = await Axios.get("/transport/", {
+        params: { page, query, limit: 10 },
+      });
+      setTransports(response.data.transports);
+      setTotalPages(response.data.totalPages);
+      setLoading(false);
+    } catch (error) {
+      setError(error);
+      setLoading(false);
+    }
+  };
   useEffect(() => {
-    setTransports(data);
-  }, [data]);
+    getTask();
+  }, []);
+  const handlePage = (page) => {
+    getTask(page);
+  };
   return (
     <>
       <div className="text-end my-3">
@@ -91,7 +112,8 @@ const TruckLocationTable = () => {
             <div style={{ display: "flex", alignItems: "center" }}>
               <Pagination
                 defaultCurrent={1}
-                total={100}
+                total={totalPage * 10}
+                onChange={handlePage}
                 showSizeChanger={false}
                 theme={{
                   token: {
