@@ -72,7 +72,9 @@ const InventoryTable = () => {
                     <td className="">{item?.location}</td>
                     <td className="ps-4">{item?.mechanics?.length}</td>
                     <td className="ps-4">{item?.appointments?.length}</td>
-                    <td className="ps-4">${item?.earnings}</td>
+                    <td className="ps-4">
+                      $<Earning appointments={item?.appointments} />
+                    </td>
                     <td className="">{status}</td>
                   </tr>
                 );
@@ -160,4 +162,24 @@ const StatusComp = ({ icon, status, color }) => {
       <span style={{ color: color, marginLeft: "7px" }}>{status}</span>
     </div>
   );
+};
+
+const Earning = ({ appointments }) => {
+  const [total, setTotal] = useState(0);
+  return (
+    <>
+      {appointments?.map((val, index) => (
+        <OneOpointmentEarning id={val} setTotal={setTotal} />
+      ))}
+      {total}
+    </>
+  );
+};
+
+const OneOpointmentEarning = ({ id, setTotal }) => {
+  const { data } = useFetch(`/appointment/${id}`);
+  useEffect(() => {
+    setTotal((pre) => pre + (parseInt(data?.paid) || 0));
+  }, [data, setTotal]);
+  return <></>;
 };

@@ -24,3 +24,7 @@
 .ant-switch-checked {
   background-color: orange !important;
 }
+
+a{
+  text-decoration: none !important;
+}

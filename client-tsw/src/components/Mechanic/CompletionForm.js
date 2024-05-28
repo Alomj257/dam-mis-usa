@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import Header from "./Header_Mechanic";
 import HomeSvg from "../../assets/Appointment/HomeSvg";
 import NextIconSvg from "../../assets/Appointment/NextIconSvg";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import useFetch from "../../Hooks/useFetch";
 import Loader from "../../Utils/Loader";
 import ErrorCustom from "../../Utils/Error";
@@ -81,6 +81,7 @@ const Completion = () => {
   useEffect(() => {
     setPart(data);
   }, [data]);
+  const navigate = useNavigate();
   const handleComplete = async () => {
     const details = { total, paid, extra, parts };
     try {
@@ -89,6 +90,7 @@ const Completion = () => {
         return toast.error(data?.message);
       }
       toast.success(data);
+      navigate("/mechanic/Completed");
     } catch (error) {
       console.log(error);
       toast.error(error?.response?.data?.message || error?.response?.data);
@@ -146,6 +148,7 @@ const Completion = () => {
         }}
       >
         <button
+          onClick={() => navigate(-1)}
           style={{
             backgroundColor: "transparent",
             borderRadius: "6px",

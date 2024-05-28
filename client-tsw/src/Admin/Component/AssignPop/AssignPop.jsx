@@ -41,6 +41,7 @@ const AssignPop = ({ openPop, setPop, appointment }) => {
         return;
       }
       toast.success(data);
+      window.location.reload();
     } catch (error) {
       console.log(error);
       toast.error(error?.response?.data?.message);
