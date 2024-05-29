@@ -4,6 +4,7 @@ import "./RejectPoP.css";
 import { toast } from "react-toastify";
 import { cancelledTranpostService } from "../../../../APIServices/Transport/TransportService";
 import { useAuth } from "../../../../context/AuthContext";
+import { useNavigate } from "react-router-dom";
 const RejectPop = ({ openPop, setPop, task }) => {
   let [workshop, setWorkshop] = useState(null);
   const [{ user }] = useAuth();
@@ -11,6 +12,7 @@ const RejectPop = ({ openPop, setPop, task }) => {
     const { name, value } = e.target;
     setWorkshop({ ...workshop, [name]: value });
   };
+  const navigate = useNavigate();
   const handleSubmit = async (e) => {
     e.preventDefault();
     workshop.driverId = user?._id;
@@ -21,6 +23,7 @@ const RejectPop = ({ openPop, setPop, task }) => {
         return;
       }
       toast.success(data);
+      navigate("/truck-driver/locate-tasks");
     } catch (error) {
       console.log(error);
       toast.error(error?.response?.data?.message || error?.response?.data);

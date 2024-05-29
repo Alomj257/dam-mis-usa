@@ -16,8 +16,8 @@ const AssignPop = ({ openPop, setPop, appointment }) => {
     setUsers(data);
   }, [data]);
   useEffect(() => {
-    setWorkshop(getWorkshops?.data);
-  }, [getWorkshops?.data]);
+    setWorkshop(getWorkshops?.data?.workshops);
+  }, [getWorkshops?.data?.workshops]);
   const handleChange = (e) => {
     const { value, name } = e.target;
     setDetails({ ...details, [name]: value });

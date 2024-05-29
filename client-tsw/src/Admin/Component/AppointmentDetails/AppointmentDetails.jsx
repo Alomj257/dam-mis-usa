@@ -412,8 +412,8 @@ const DoubleSelect = ({
   const [workshop, setWorkshop] = useState(null);
   const [workshops, setWorkshops] = useState(data);
   useEffect(() => {
-    setWorkshops(data);
-  }, [data]);
+    setWorkshops(data?.workshops);
+  }, [data?.workshops]);
   useEffect(() => {
     setWorkshop(getWorkshop?.data);
   }, [getWorkshop?.data]);

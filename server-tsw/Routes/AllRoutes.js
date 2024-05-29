@@ -14,7 +14,7 @@ const Router = require("express").Router();
 Router.use("/auth", AuthRoutes);
 // Router.use("/appointment", VerifyUser, approveVerification, RepairRoutes);
 Router.use("/appointment", RepairRoutes);
-Router.use("/workshop", VerifyUser, approveVerification, workshopRoutes);
+Router.use("/workshop", workshopRoutes);
 Router.use("/parts", VerifyUser, approveVerification, partsRoutes);
 Router.use("/transport", VerifyUser, approveVerification, TransportRoutes);
 Router.use("/field", VerifyUser, FieldRoutes);

@@ -54,26 +54,48 @@ exports.getById = async (req, res) => {
 };
 exports.getAlltransports = async (req, res) => {
   try {
-    const transports = await Transportation.find();
-    res.status(201).json(transports);
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
+
+    const transports = await Transportation.find()
+      .skip((page - 1) * limit)
+      .limit(limit || 9999);
+    const total = await Transportation.countDocuments();
+    res
+      .status(201)
+      .json({ total, page, totalPages: Math.ceil(total / limit), transports });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 };
 exports.getAllTransportByUser = async (req, res) => {
   try {
-    const transports = await Transportation.find({ userId: req.params.userId });
-    res.status(200).json(transports);
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
+    const transports = await Transportation.find({ userId: req.params.userId })
+      .skip((page - 1) * limit)
+      .limit(limit || 9999);
+    const total = await Transportation.countDocuments();
+    res
+      .status(200)
+      .json({ total, page, totalPages: Math.ceil(total / limit), transports });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 };
 exports.getAllTransportByDriver = async (req, res) => {
   try {
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
     const transports = await Transportation.find({
       assingTo: req.params.userId,
-    });
-    res.status(200).json(transports);
+    })
+      .skip((page - 1) * limit)
+      .limit(limit || 9999);
+    const total = await Transportation.countDocuments();
+    res
+      .status(200)
+      .json({ total, page, totalPages: Math.ceil(total / limit), transports });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
@@ -81,11 +103,18 @@ exports.getAllTransportByDriver = async (req, res) => {
 exports.getAllTransportByDriverAndStatus = async (req, res) => {
   try {
     console.log(req.params.status);
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
     const transports = await Transportation.find({
       assingTo: req.params.userId,
       status: req.params.status,
-    });
-    res.status(200).json(transports);
+    })
+      .skip((page - 1) * limit)
+      .limit(limit || 9999);
+    const total = await Transportation.countDocuments();
+    res
+      .status(200)
+      .json({ total, page, totalPages: Math.ceil(total / limit), transports });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }

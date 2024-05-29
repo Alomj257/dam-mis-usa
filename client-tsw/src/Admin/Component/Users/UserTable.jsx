@@ -24,33 +24,40 @@ import { toast } from "react-toastify";
 import "./User.css";
 import Loader from "../../../Utils/Loader";
 import ErrorCustom from "../../../Utils/Error";
+import Axios from "../../../APIServices/Axios";
 const UserTable = () => {
-  const { data, loading, error, reFetch } = useFetch("/auth/users");
-  const [filtered, setFilter] = useState(data);
+  // const { data, loading, error, reFetch } = useFetch("/auth/users");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const [filtered, setFilter] = useState([]);
+  const [totalPage, setTotalPages] = useState(0);
+  const fetchUsers = async (page, query) => {
+    setLoading(true);
+    setError(null);
+    try {
+      const response = await Axios.get("/auth/users", {
+        params: { page, query, limit: 10 },
+      });
+      setFilter(response.data.users);
+      setTotalPages(response.data.totalPages);
+      setLoading(false);
+    } catch (error) {
+      setError(error);
+      setLoading(false);
+    }
+  };
+
   const [openOptionIndex, setOpenOptionIndex] = useState(false);
   useEffect(() => {
-    setFilter(data);
-  }, [data]);
+    fetchUsers();
+  }, []);
   const handleChange = (e) => {
     const value = e.target.value.trim();
-    const filter = data?.filter(
-      (user) =>
-        user?.name?.toLowerCase().includes(value?.toLowerCase()) ||
-        user?.email
-          ?.toLowerCase()
-          .includes(
-            value?.toLowerCase() ||
-              user?.role?.toLowerCase().includes(value?.toLowerCase())
-          )
-    );
-    setFilter(filter);
+    fetchUsers(value);
   };
   const handleSelect = (e) => {
     const value = e.target.value.trim();
-    const filter = data?.filter((user) =>
-      user?.role?.toLowerCase().includes(value?.toLowerCase())
-    );
-    setFilter(filter);
+    fetchUsers(value);
   };
   const handleEnable = async (user) => {
     try {
@@ -63,7 +70,7 @@ const UserTable = () => {
         return;
       }
       toast.success(data);
-      reFetch();
+      fetchUsers();
     } catch (error) {
       console.log(error);
       toast.error(error?.response?.data?.message);
@@ -84,7 +91,7 @@ const UserTable = () => {
         return;
       }
       toast.success(data);
-      reFetch();
+      fetchUsers();
     } catch (error) {
       console.log(error);
       toast.error(error?.response?.data?.message);
@@ -98,14 +105,14 @@ const UserTable = () => {
         return;
       }
       toast.success(data);
-      reFetch();
+      fetchUsers();
     } catch (error) {
       console.log(error);
       toast.error(error?.response?.data?.message);
     }
   };
   const handlePageNumber = (page) => {
-    console.log(page);
+    fetchUsers(page);
   };
   return (
     <>
@@ -236,7 +243,7 @@ const UserTable = () => {
             <div style={{ display: "flex", alignItems: "center" }}>
               <Pagination
                 defaultCurrent={1}
-                total={100}
+                total={totalPage * 10}
                 onChange={handlePageNumber}
                 showSizeChanger={false}
                 theme={{

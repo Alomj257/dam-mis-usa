@@ -7,8 +7,8 @@ const Users = () => {
   const { data, reFetch } = useFetch("/auth/users");
   const [users, setUsers] = useState([]);
   useEffect(() => {
-    setUsers(data);
-  }, [data]);
+    setUsers(data?.users);
+  }, [data?.users]);
   const handleEnable = async (userId) => {
     try {
       const { data } = await userEnableService({ id: userId });

@@ -8,19 +8,45 @@ import GetUserName from "../../../../Utils/GetUserName";
 import ErrorCustom from "../../../../Utils/Error";
 import Loader from "../../../../Utils/Loader";
 import { useNavigate } from "react-router-dom";
-import useFetch from "../../../../Hooks/useFetch";
 import { useAuth } from "../../../../context/AuthContext";
+import Axios from "../../../../APIServices/Axios";
 
 const TransitTable = ({ status }) => {
   const navigate = useNavigate();
   const [{ user }] = useAuth();
-  const { data, loading, error } = useFetch(
-    `/transport/driver/status/${user?._id}/${status}`
-  );
+  // const { data, loading, error } = useFetch(
+  //   `/transport/driver/status/${user?._id}/${status}`
+  // );
   const [transport, setTransports] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const [totalPage, setTotalPages] = useState(0);
+  const getTask = async (page, query) => {
+    setLoading(true);
+    setError(null);
+    try {
+      const response = await Axios.get(
+        `/transport/driver/status/${user?._id}/${status}`,
+        {
+          params: { page, query, limit: 10 },
+        }
+      );
+      console.log(response);
+      setTransports(response.data.transports);
+      setTotalPages(response.data.totalPages);
+      setLoading(false);
+    } catch (error) {
+      setError(error);
+      setLoading(false);
+    }
+  };
   useEffect(() => {
-    setTransports(data);
-  }, [data]);
+    getTask();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+  const handlePage = (page) => {
+    getTask(page);
+  };
   return (
     <>
       <div className="table_sec">
@@ -87,7 +113,8 @@ const TransitTable = ({ status }) => {
             <div style={{ display: "flex", alignItems: "center" }}>
               <Pagination
                 defaultCurrent={1}
-                total={100}
+                total={totalPage * 10}
+                onChange={handlePage}
                 showSizeChanger={false}
                 theme={{
                   token: {

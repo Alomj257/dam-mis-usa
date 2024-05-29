@@ -252,8 +252,8 @@ const DoubleSelect = ({ name1, name2, title1, title2, handleChange }) => {
   const { data } = useFetch("/workshop/");
   const [workshop, setWorkshop] = useState([]);
   useEffect(() => {
-    setWorkshop(data);
-  }, [data]);
+    setWorkshop(data?.workshops);
+  }, [data?.workshops]);
   return (
     <div style={{ display: "flex", width: "100%", marginTop: "10px" }}>
       <div style={{ width: "50%" }}>
