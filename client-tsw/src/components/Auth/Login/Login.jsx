@@ -37,16 +37,16 @@ function Login() {
       setAuth({ ...auth, user: data?.user, token: data?.token });
       Cookies.set("auth", JSON.stringify(data));
       if (data.user.role === "DRIVER") {
-        window.location.reload();
         navigate("/truck-driver/appointment");
+        window.location.reload();
       }
       if (data.user.role === "MECHANICS") {
-        window.location.reload();
         navigate("/mechanic/Pending");
+        window.location.reload();
       }
       if (data.user.role === "ADMIN") {
-        window.location.reload();
         navigate("/admin");
+        window.location.reload();
       }
     } catch (error) {
       console.log(error);

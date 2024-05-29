@@ -1,0 +1,10 @@
+.driver-navbar ul{
+list-style: none;
+margin: 0;
+padding: 0;
+}
+.driver-navbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
