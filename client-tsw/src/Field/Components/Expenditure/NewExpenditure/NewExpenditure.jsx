@@ -1,26 +1,22 @@
 import React, { useEffect, useState } from "react";
 import { BsX } from "react-icons/bs";
-import "./NewField.css";
+import "./NewExpenditure.css";
 import { toast } from "react-toastify";
 import { createFieldService } from "../../../../APIServices/FIeld/Field/FieldService";
 import useFetch from "../../../../Hooks/useFetch";
-import { useAuth } from "../../../../context/AuthContext";
-const NewField = ({ openPop, setPop, onAdd }) => {
+const NewExpenditure = ({ openPop, setPop, onAdd }) => {
   const [field, setField] = useState(null);
   const [users, setuser] = useState([]);
-  const { data } = useFetch("/auth/users/by/FIELDER");
-  const [{ user }] = useAuth();
-
+  const { data } = useFetch("/auth/users?limit=99999");
   useEffect(() => {
-    setuser(data);
-  }, [data]);
+    setuser(data?.users);
+  }, [data?.users]);
   const handleChange = (e) => {
     const { name, value } = e.target;
     setField({ ...field, [name]: value });
   };
   const handleSubmit = async (e) => {
     e.preventDefault();
-    field.owner = user?._id;
     try {
       const { data } = await createFieldService(field);
       if (data?.message) {
@@ -85,6 +81,27 @@ const NewField = ({ openPop, setPop, onAdd }) => {
                     />
                   </div>
                   <div className="d-flex flex-column gap-2">
+                    <label htmlFor="owner">Owner*</label>
+                    <select
+                      type="text"
+                      id="owner"
+                      onChange={handleChange}
+                      required
+                      className="border border-2 rounded p-1"
+                      name="owner"
+                      placeholder="Area in Hect"
+                    >
+                      <option value="">Select owner</option>
+                      {Array.isArray(users)
+                        ? users?.map((val, index) => (
+                            <option value={val?._id} key={index}>
+                              {val?.name}
+                            </option>
+                          ))
+                        : ""}
+                    </select>
+                  </div>
+                  <div className="d-flex flex-column gap-2">
                     <label htmlFor="maintainer">Maintainer*</label>
                     <select
                       type="text"
@@ -120,4 +137,4 @@ const NewField = ({ openPop, setPop, onAdd }) => {
   );
 };
 
-export default NewField;
+export default NewExpenditure;

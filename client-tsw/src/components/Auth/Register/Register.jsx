@@ -16,7 +16,7 @@ function Register() {
   const [user, setUser] = useState({ gender: "Male" });
   const [fileName, setFileName] = useState(null);
 
-  const [field, setfield] = useState("Truck Driver");
+  const [field, setfield] = useState("DRIVER");
   const handleChange = (e) => {
     setfield(e.target.value);
   };
@@ -46,7 +46,7 @@ function Register() {
     e.preventDefault();
     user.phone = phoneNumber;
 
-    user.role = field !== "Mechanic" ? "DRIVER" : "MECHANICS";
+    user.role = field;
     console.log(user);
     const formData = new FormData();
 
@@ -92,8 +92,9 @@ function Register() {
                   className="from_input"
                   onChange={handleChange}
                 >
-                  <option value="Truck Driver">Truck Driver</option>
-                  <option value="Mechanic">Mechanic</option>
+                  <option value="DRIVER">Truck Driver</option>
+                  <option value="MECHANICS">Mechanic</option>
+                  <option value="FIELDER">Land Manager </option>
                 </select>
               </div>
               <div class="group">
@@ -180,10 +181,17 @@ function Register() {
                 />
               </div>
 
-              {field === "Truck Driver" ? (
+              {field === "DRIVER" ? (
                 <Truck
                   handleUserChange={handleUserChange}
                   fileName={fileName}
+                  field={field}
+                />
+              ) : field === "FIELDER" ? (
+                <Fielder
+                  handleUserChange={handleUserChange}
+                  fileName={fileName}
+                  field={field}
                 />
               ) : (
                 <Mechanic
@@ -324,6 +332,27 @@ const Truck = ({ handleUserChange, fileName }) => {
         name="truckPhoto"
         handleUserChange={handleUserChange}
       />
+      <UploadComp
+        fileName={fileName}
+        title={"Selfie *"}
+        name="profile"
+        handleUserChange={handleUserChange}
+      />
+    </>
+  );
+};
+const Fielder = ({ handleUserChange, fileName }) => {
+  return (
+    <>
+      <div class="group">
+        <input
+          type="text"
+          placeholder="Address *"
+          className="from_input"
+          required
+        />
+      </div>
+
       <UploadComp
         fileName={fileName}
         title={"Selfie *"}

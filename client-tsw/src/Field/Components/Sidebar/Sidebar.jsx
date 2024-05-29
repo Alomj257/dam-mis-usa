@@ -70,16 +70,16 @@ const SideBar = () => {
           >
             Field Managament
           </h5>
-          <NavLink to="/field/fields">
+          {/* <NavLink to="/field/fields">
             <AppointmentElement logo={<GiWheat />} title="Fields" />
-          </NavLink>
+          </NavLink> */}
           <NavLink to="/field/maintainer">
             <AppointmentElement
               logo={<GiWheat />}
               title=" Maintaining Fields"
             />
           </NavLink>
-          <NavLink to="/field/owener">
+          <NavLink to="/field/owner">
             <AppointmentElement logo={<BsPeople />} title=" Your Fields" />
           </NavLink>
         </div>

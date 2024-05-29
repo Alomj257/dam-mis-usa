@@ -1,28 +1,21 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { BsX } from "react-icons/bs";
-import "./NewField.css";
+import "./NewMaterial.css";
 import { toast } from "react-toastify";
-import { createFieldService } from "../../../../APIServices/FIeld/Field/FieldService";
-import useFetch from "../../../../Hooks/useFetch";
+import { createMaterialService } from "../../../../APIServices/FIeld/Field/MaterialService";
 import { useAuth } from "../../../../context/AuthContext";
-const NewField = ({ openPop, setPop, onAdd }) => {
-  const [field, setField] = useState(null);
-  const [users, setuser] = useState([]);
-  const { data } = useFetch("/auth/users/by/FIELDER");
+const NewMaterial = ({ openPop, setPop, onAdd }) => {
+  const [material, setMaterial] = useState(null);
   const [{ user }] = useAuth();
-
-  useEffect(() => {
-    setuser(data);
-  }, [data]);
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setField({ ...field, [name]: value });
+    setMaterial({ ...material, [name]: value });
   };
   const handleSubmit = async (e) => {
     e.preventDefault();
-    field.owner = user?._id;
+    material.owner = user?._id;
     try {
-      const { data } = await createFieldService(field);
+      const { data } = await createMaterialService(material);
       if (data?.message) {
         toast.error(data?.message);
         return;
@@ -53,7 +46,7 @@ const NewField = ({ openPop, setPop, onAdd }) => {
                   style={{ fontSize: "24px" }}
                   className="mb-2 fw-semibold text-center "
                 >
-                  Add New Field
+                  Add New Material
                 </div>
                 <form
                   onSubmit={handleSubmit}
@@ -61,49 +54,45 @@ const NewField = ({ openPop, setPop, onAdd }) => {
                   className="my-2 d-flex flex-column gap-3"
                 >
                   <div className="d-flex flex-column gap-2">
-                    <label htmlFor="location">Field Location*</label>
+                    <label htmlFor="name">Material Name*</label>
                     <input
                       type="text"
-                      id="location"
+                      id="name"
                       required
                       onChange={handleChange}
                       className="border border-2 rounded p-1"
-                      name="location"
-                      placeholder="Location"
+                      name="name"
+                      placeholder="Name"
                     />
                   </div>
                   <div className="d-flex flex-column gap-2">
-                    <label htmlFor="area">Field Size*</label>
-                    <input
-                      type="text"
-                      required
-                      id="area"
-                      onChange={handleChange}
-                      className="border border-2 rounded p-1"
-                      name="area"
-                      placeholder="Area in Hect"
-                    />
-                  </div>
-                  <div className="d-flex flex-column gap-2">
-                    <label htmlFor="maintainer">Maintainer*</label>
-                    <select
-                      type="text"
-                      id="maintainer"
-                      required
-                      onChange={handleChange}
-                      className="border border-2 rounded p-1"
-                      name="maintainer"
-                      placeholder="Area in Hect"
-                    >
-                      <option value="">Select Maintainer</option>
-                      {Array.isArray(users)
-                        ? users?.map((val, index) => (
-                            <option value={val?._id} key={index}>
-                              {val?.name}
-                            </option>
-                          ))
-                        : ""}
-                    </select>
+                    <label htmlFor="stock">Stock Size*</label>
+                    <div className="d-flex gap-4">
+                      {" "}
+                      <input
+                        type="text"
+                        required
+                        id="stock"
+                        onChange={handleChange}
+                        className="border border-2 w-100 rounded p-1"
+                        name="stock"
+                        placeholder="10"
+                      />
+                      <select
+                        type="number"
+                        required
+                        id="stock"
+                        onChange={handleChange}
+                        className="border border-2 rounded p-1"
+                        name="stockType"
+                        placeholder="10"
+                      >
+                        <option value="">Select Stock type</option>
+                        <option value="pieces">Piece</option>
+                        <option value="kg">In Kg</option>
+                        <option value="sacks">In Sack</option>
+                      </select>
+                    </div>
                   </div>
                   <div className="d-flex align-items-center justify-content-center">
                     <button type="submit" className="assign-submit-btn">
@@ -120,4 +109,4 @@ const NewField = ({ openPop, setPop, onAdd }) => {
   );
 };
 
-export default NewField;
+export default NewMaterial;

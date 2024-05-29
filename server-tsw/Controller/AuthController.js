@@ -230,7 +230,7 @@ const getUsersByRole = async (req, res) => {
     let { role } = req.params;
     role = role.toUpperCase();
     console.log("Requested role:", role);
-    if (!["ADMIN", "DRIVER", "MECHANICS"].includes(role)) {
+    if (!["ADMIN", "DRIVER", "MECHANICS", "FIELDER"].includes(role)) {
       console.log("Invalid role specified");
       return res.status(400).json({ message: "Invalid role specified" });
     }

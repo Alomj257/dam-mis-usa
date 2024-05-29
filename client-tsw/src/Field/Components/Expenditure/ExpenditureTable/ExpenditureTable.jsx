@@ -8,13 +8,13 @@ import { Pagination } from "antd";
 import PrevSvg from "../../../../assets/Appointment/PrevSvg";
 import { useNavigate } from "react-router-dom";
 import { FaPlus } from "react-icons/fa6";
-import NewField from "../NewField/NewField";
 import Axios from "../../../../APIServices/Axios";
 import Loader from "../../../../Utils/Loader";
 import ErrorCustom from "../../../../Utils/Error";
-import GetUserName from "../../../../Utils/GetUserName";
+import NewExpenditure from "../NewExpenditure/NewExpenditure";
+import useFetch from "../../../../Hooks/useFetch";
 
-const FieldTable = ({ url, type }) => {
+const ExpenditureTable = () => {
   const navigate = useNavigate();
   const [openPop, setOpenPop] = useState(false);
   const [fields, setfield] = useState([]);
@@ -25,11 +25,11 @@ const FieldTable = ({ url, type }) => {
     setLoading(true);
     setError(null);
     try {
-      const response = await Axios.get(`/field/${url ? url : ""}`, {
+      const response = await Axios.get(`/expenditure/`, {
         params: { page, query, limit: 10 },
       });
-      // console.log(response);
-      setfield(response.data.fields);
+      console.log(response);
+      setfield(response.data.expenditure);
       setTotalPages(response.data.totalPages);
       setLoading(false);
     } catch (error) {
@@ -49,21 +49,17 @@ const FieldTable = ({ url, type }) => {
   };
   return (
     <>
-      {type === "OWNER" && (
-        <NewField onAdd={onAdd} openPop={openPop} setPop={setOpenPop} />
-      )}
+      <NewExpenditure onAdd={onAdd} openPop={openPop} setPop={setOpenPop} />
       <div className="table_sec mt-3">
         <div className="d-flex justify-content-between align-items-center my-2 mb-4">
           <h3 className="text-muted"> Fields</h3>
-          {type === "OWNER" && (
-            <button
-              onClick={() => setOpenPop(true)}
-              to="new-workshop"
-              className="admin-new-task-btn mt-auto"
-            >
-              <FaPlus /> <span>New Field</span>{" "}
-            </button>
-          )}
+          <button
+            onClick={() => setOpenPop(true)}
+            to="new-workshop"
+            className="admin-new-task-btn mt-auto"
+          >
+            <FaPlus /> <span>New Field</span>{" "}
+          </button>
         </div>
         <div
           style={{
@@ -80,10 +76,10 @@ const FieldTable = ({ url, type }) => {
           ) : (
             <table>
               <tr className="first_row text-uppercase">
-                <td className="ps-3">Location</td>
-                <td>Size</td>
-                <td>Maintainer</td>
-                <td>Owner</td>
+                <td className="ps-3">Field/Land</td>
+                <td>Workers</td>
+                <td>Rolled Cost</td>
+                <td>Fuel Cost</td>
                 <td>status</td>
               </tr>
               {Array.isArray(fields)
@@ -95,14 +91,12 @@ const FieldTable = ({ url, type }) => {
                         key={index}
                         onClick={() => navigate("details", { state: item })}
                       >
-                        <td className=" ps-3">{item?.location}</td>
-                        <td className="">{item?.area}</td>
                         <td className="ps-4">
-                          <GetUserName id={item?.maintainer} />
+                          <GetFielById id={item?.maintainer} />
                         </td>
-                        <td className="ps-4">
-                          <GetUserName id={item?.owner} />
-                        </td>
+                        <td className=" ps-3">{item?.workers}</td>
+                        <td className="">{item?.rolledCost}</td>
+                        <td className="">{item?.fuelCost}</td>
                         <td className="">{status}</td>
                       </tr>
                     );
@@ -146,7 +140,7 @@ const FieldTable = ({ url, type }) => {
   );
 };
 
-export default FieldTable;
+export default ExpenditureTable;
 
 export function haldleStatus(s) {
   if (s === "availbale") {
@@ -190,4 +184,8 @@ const StatusComp = ({ icon, status, color }) => {
       <span style={{ color: color, marginLeft: "7px" }}>{status}</span>
     </div>
   );
+};
+const GetFielById = ({ id }) => {
+  const { data } = useFetch(`/field/${id}`);
+  return <>{data?.location}</>;
 };

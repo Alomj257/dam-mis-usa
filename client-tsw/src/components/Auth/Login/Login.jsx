@@ -38,15 +38,15 @@ function Login() {
       Cookies.set("auth", JSON.stringify(data));
       if (data.user.role === "DRIVER") {
         navigate("/truck-driver/appointment");
-        window.location.reload();
       }
       if (data.user.role === "MECHANICS") {
         navigate("/mechanic/Pending");
-        window.location.reload();
       }
       if (data.user.role === "ADMIN") {
         navigate("/admin");
-        window.location.reload();
+      }
+      if (data.user.role === "FIELDER") {
+        navigate("/field");
       }
     } catch (error) {
       console.log(error);

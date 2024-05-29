@@ -14,6 +14,7 @@ const userSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "user",
     },
+    status: String,
     field: { type: mongoose.Schema.Types.ObjectId, ref: "field" },
   },
   { timestamps: true }
