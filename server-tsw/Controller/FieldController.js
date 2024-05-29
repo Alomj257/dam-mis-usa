@@ -50,8 +50,16 @@ exports.getFieldById = async (req, res) => {
 };
 exports.getAllFields = async (req, res) => {
   try {
-    const fields = await Field.find();
-    res.status(200).json(fields);
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
+
+    const fields = await Field.find()
+      .skip((page - 1) * limit)
+      .limit(limit);
+    const total = await Field.countDocuments();
+    res
+      .status(200)
+      .json({ page, total, fields, totalPages: Math.ceil(total / limit) });
   } catch (error) {
     console.log(error);
     res.status(500).json({ message: error.message });

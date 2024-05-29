@@ -47,6 +47,9 @@ import AcceptNewTaskPage from "./Driver/Pages/TruckLocation/NewTaskPage";
 import AcceptFormPage from "./Driver/Pages/TruckLocation/AcceptFormPage";
 import TrasitePage from "./Driver/Pages/TruckLocation/TrasitePage";
 import TransitComplatePage from "./Driver/Pages/TruckLocation/ComplatePage";
+import FieldHomePage from "./Field/Pages/FieldHomePage/FieldHomePage";
+import FieldPage from "./Field/Pages/Field/FieldPage";
+import MaintainerField from "./Field/Pages/Field/MaintainerField";
 
 /////////////////////////////////////////////
 
@@ -64,6 +67,10 @@ function App() {
       <ToastContainer />
       <Router>
         <Routes>
+          <Route path="/field" element={<FieldHomePage />}>
+            <Route path="fields" element={<FieldPage />} />
+            <Route path="maintainer" element={<MaintainerField />} />
+          </Route>
           {/* truck  Driver dashbaord */}
           <Route path="/truck-driver" element={<Dashboard />}>
             <Route path="appointment" element={<AppointmentPage />} />
@@ -108,9 +115,7 @@ function App() {
               element={<DriverTruckLocationDetails />}
             />
           </Route>
-          {/* Admin */}
-          {/* <Route path="/admin/users" element={<UserPage />} /> */}
-          {/* <Route path="/admin/appoiments" element={<AppoimentPage />} /> */}
+          {/* admin */}
           <Route path="/admin" element={<AdminDashboard />}>
             <Route path="users" element={<UserPage />} />
             <Route path="workshop" element={<InventoryPage />} />

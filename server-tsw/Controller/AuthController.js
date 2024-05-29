@@ -40,9 +40,11 @@ const register = async (req, res) => {
       req.body = other;
     }
     const newUser = await new User(req.body).save();
-    const workshop = await Workshop.findById(req.body.workshop);
-    workshop.mechanics.push(newUser?._id);
-    await workshop.save();
+    if (req.body.role === "MECHANICS") {
+      const workshop = await Workshop.findById(req.body.workshop);
+      workshop.mechanics.push(newUser?._id);
+      await workshop.save();
+    }
     res.status(201).json("your account successfully created");
   } catch (error) {
     console.log(error);

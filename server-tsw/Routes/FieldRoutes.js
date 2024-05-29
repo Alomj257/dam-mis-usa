@@ -16,6 +16,6 @@ FieldRoutes.delete("/:id", deleteField);
 FieldRoutes.get("/:id", getFieldById);
 FieldRoutes.get("/", getAllFields);
 FieldRoutes.get("/owner/:ownerId", getFieldByOwners);
-FieldRoutes.get("/matainer/:maintainerId", getFieldByMatainer);
+FieldRoutes.get("/maintainer/:maintainerId", getFieldByMatainer);
 
 module.exports = FieldRoutes;
