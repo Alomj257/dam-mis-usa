@@ -116,7 +116,7 @@ h5,
 .toggleIcon {
   margin-left: -50px !important;
 }
-.Truck {
+.Truck , .DRIVER,.FIELDER{
   background: linear-gradient(0deg, #054857 0%, #014b5b00 110%),
     url("../../../assets/Auth/pexels-fauxels2png.png");
   width: 50%;
@@ -124,7 +124,7 @@ h5,
   background-size: cover;
   background-position: center;
 }
-.Mechanic {
+.Mechanic ,.MECHANICS{
   background: linear-gradient(0deg, #054857 0%, #014b5b00 110%),
     url("../../../assets/Auth/pexels-fauxels1.png");
   width: 50%;

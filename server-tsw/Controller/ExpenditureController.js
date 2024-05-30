@@ -50,8 +50,16 @@ exports.getExpenditureById = async (req, res) => {
 };
 exports.getAllExpenditures = async (req, res) => {
   try {
-    const expenditures = await Expenditure.find();
-    res.status(200).json(expenditures);
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
+    const expenditure = await Expenditure.find()
+      .skip((page - 1) * limit)
+      .limit(limit);
+    res.status(200).json({
+      expenditure,
+      page,
+      totalPages: Math.ceil(expenditure.length / limit),
+    });
   } catch (error) {
     console.log(error);
     res.status(500).json({ message: error.message });
@@ -59,8 +67,16 @@ exports.getAllExpenditures = async (req, res) => {
 };
 exports.getExpenditureByFields = async (req, res) => {
   try {
-    const expenditures = await Expenditure.find({ field: req.params.fieldId });
-    res.status(200).json(expenditures);
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
+    const expenditure = await Expenditure.find({ field: req.params.fieldId })
+      .skip((page - 1) * limit)
+      .limit(limit);
+    res.status(200).json({
+      expenditure,
+      page,
+      totalPages: Math.ceil(expenditure.length / limit),
+    });
   } catch (error) {
     console.log(error);
     res.status(500).json({ message: error.message });

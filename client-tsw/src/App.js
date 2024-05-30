@@ -50,6 +50,10 @@ import TransitComplatePage from "./Driver/Pages/TruckLocation/ComplatePage";
 import FieldHomePage from "./Field/Pages/FieldHomePage/FieldHomePage";
 import FieldPage from "./Field/Pages/Field/FieldPage";
 import MaintainerField from "./Field/Pages/Field/MaintainerField";
+import OwnerFieldPage from "./Field/Pages/Field/OwnerFieldPage";
+import MaterialPage from "./Field/Pages/Material/MaterialPage";
+import ExpenditurePage from "./Field/Pages/Expenditure/ExpenditurePage";
+import FieldDetailsPage from "./Field/Pages/Field/FieldDetailsPage";
 
 /////////////////////////////////////////////
 
@@ -69,7 +73,13 @@ function App() {
         <Routes>
           <Route path="/field" element={<FieldHomePage />}>
             <Route path="fields" element={<FieldPage />} />
+            <Route path="fields/details" element={<FieldDetailsPage />} />
+            <Route path="maintainer/details" element={<FieldDetailsPage />} />
+            <Route path="owner/details" element={<FieldDetailsPage />} />
             <Route path="maintainer" element={<MaintainerField />} />
+            <Route path="owner" element={<OwnerFieldPage />} />
+            <Route path="materials" element={<MaterialPage />} />
+            <Route path="expenditure" element={<ExpenditurePage />} />
           </Route>
           {/* truck  Driver dashbaord */}
           <Route path="/truck-driver" element={<Dashboard />}>

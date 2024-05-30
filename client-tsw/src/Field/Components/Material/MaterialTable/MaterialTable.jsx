@@ -8,16 +8,16 @@ import { Pagination } from "antd";
 import PrevSvg from "../../../../assets/Appointment/PrevSvg";
 import { useNavigate } from "react-router-dom";
 import { FaPlus } from "react-icons/fa6";
-import NewField from "../NewField/NewField";
 import Axios from "../../../../APIServices/Axios";
 import Loader from "../../../../Utils/Loader";
 import ErrorCustom from "../../../../Utils/Error";
 import GetUserName from "../../../../Utils/GetUserName";
+import NewMaterial from "../NewMaterial/NewMaterial";
 
-const FieldTable = ({ url, type }) => {
+const MaterialTable = () => {
   const navigate = useNavigate();
   const [openPop, setOpenPop] = useState(false);
-  const [fields, setfield] = useState([]);
+  const [materials, setMaterial] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [totalPage, setTotalPages] = useState(0);
@@ -25,11 +25,11 @@ const FieldTable = ({ url, type }) => {
     setLoading(true);
     setError(null);
     try {
-      const response = await Axios.get(`/field/${url ? url : ""}`, {
+      const response = await Axios.get(`/material/`, {
         params: { page, query, limit: 10 },
       });
-      // console.log(response);
-      setfield(response.data.fields);
+      console.log(response);
+      setMaterial(response.data.materials);
       setTotalPages(response.data.totalPages);
       setLoading(false);
     } catch (error) {
@@ -49,21 +49,17 @@ const FieldTable = ({ url, type }) => {
   };
   return (
     <>
-      {type === "OWNER" && (
-        <NewField onAdd={onAdd} openPop={openPop} setPop={setOpenPop} />
-      )}
+      <NewMaterial onAdd={onAdd} openPop={openPop} setPop={setOpenPop} />
       <div className="table_sec mt-3">
         <div className="d-flex justify-content-between align-items-center my-2 mb-4">
-          <h3 className="text-muted"> Fields</h3>
-          {type === "OWNER" && (
-            <button
-              onClick={() => setOpenPop(true)}
-              to="new-workshop"
-              className="admin-new-task-btn mt-auto"
-            >
-              <FaPlus /> <span>New Field</span>{" "}
-            </button>
-          )}
+          <h3 className="text-muted"> Materials</h3>
+          <button
+            onClick={() => setOpenPop(true)}
+            to="new-workshop"
+            className="admin-new-task-btn mt-auto"
+          >
+            <FaPlus /> <span>New Material</span>{" "}
+          </button>
         </div>
         <div
           style={{
@@ -80,30 +76,32 @@ const FieldTable = ({ url, type }) => {
           ) : (
             <table>
               <tr className="first_row text-uppercase">
-                <td className="ps-3">Location</td>
-                <td>Size</td>
-                <td>Maintainer</td>
+                <td className="ps-3">Name</td>
                 <td>Owner</td>
+                <td>Stock</td>
                 <td>status</td>
               </tr>
-              {Array.isArray(fields)
-                ? fields?.map((item, index) => {
-                    const status = haldleStatus(item?.status);
-
+              {Array.isArray(materials)
+                ? materials?.map((item, index) => {
                     return (
                       <tr
                         key={index}
                         onClick={() => navigate("details", { state: item })}
                       >
-                        <td className=" ps-3">{item?.location}</td>
-                        <td className="">{item?.area}</td>
-                        <td className="ps-4">
-                          <GetUserName id={item?.maintainer} />
-                        </td>
-                        <td className="ps-4">
+                        <td className=" ps-3">{item?.name}</td>
+                        <td className="">
                           <GetUserName id={item?.owner} />
                         </td>
-                        <td className="">{status}</td>
+                        <td className="">
+                          {item?.stock} {item?.stockType}
+                        </td>
+                        <td
+                          className={
+                            item?.stock ? "text-success" : "text-danger"
+                          }
+                        >
+                          {item?.stock ? "Available" : "Out Of stock"}
+                        </td>
                       </tr>
                     );
                   })
@@ -146,7 +144,7 @@ const FieldTable = ({ url, type }) => {
   );
 };
 
-export default FieldTable;
+export default MaterialTable;
 
 export function haldleStatus(s) {
   if (s === "availbale") {

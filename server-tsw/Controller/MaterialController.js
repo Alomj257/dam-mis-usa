@@ -50,8 +50,17 @@ exports.getMaterialById = async (req, res) => {
 };
 exports.getAllMaterials = async (req, res) => {
   try {
-    const materials = await Material.find();
-    res.status(200).json(materials);
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
+    const materials = await Material.find()
+      .skip((page - 1) * limit)
+      .limit(limit);
+
+    res.status(200).json({
+      materials,
+      page,
+      totalPages: Math.ceil(materials.length / limit),
+    });
   } catch (error) {
     console.log(error);
     res.status(500).json({ message: error.message });

@@ -8,7 +8,7 @@ const OwnerFieldPage = () => {
   return (
     <div>
       <Navbar title="Your Fields" />
-      <FieldTable url={`owner/${user?._id}`} />
+      <FieldTable type="OWNER" url={`owner/${user?._id}`} />
     </div>
   );
 };

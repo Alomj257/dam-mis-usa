@@ -11,11 +11,16 @@ exports.createField = async (req, res) => {
 };
 exports.updateField = async (req, res) => {
   try {
-    const field = await Field.findByIdAndUpdate(req.params.id);
+    const field = await Field.findById(req.params.id);
     if (!field) {
       res.status(404).json({ message: "Invalid field id" });
       return;
     }
+    await Field.findByIdAndUpdate(
+      req.params.id,
+      { $set: req.body },
+      { new: true }
+    );
     res.status(200).json("field update successfully");
   } catch (error) {
     console.log(error);
@@ -67,8 +72,14 @@ exports.getAllFields = async (req, res) => {
 };
 exports.getFieldByOwners = async (req, res) => {
   try {
-    const fields = await Field.find({ owner: req.params.ownerId });
-    res.status(200).json(fields);
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
+    const fields = await Field.find({ owner: req.params.ownerId })
+      .skip((page - 1) * limit)
+      .limit(limit);
+    res
+      .status(200)
+      .json({ page, fields, totalPages: Math.ceil(fields?.length / limit) });
   } catch (error) {
     console.log(error);
     res.status(500).json({ message: error.message });
@@ -76,8 +87,14 @@ exports.getFieldByOwners = async (req, res) => {
 };
 exports.getFieldByMatainer = async (req, res) => {
   try {
-    const fields = await Field.find({ maintainer: req.params.maintainerId });
-    res.status(200).json(fields);
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
+    const fields = await Field.find({ maintainer: req.params.maintainerId })
+      .skip((page - 1) * limit)
+      .limit(limit);
+    res
+      .status(200)
+      .json({ page, fields, totalPages: Math.ceil(fields?.length / limit) });
   } catch (error) {
     console.log(error);
     res.status(500).json({ message: error.message });
