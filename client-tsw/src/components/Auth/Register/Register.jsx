@@ -109,7 +109,7 @@ function Register() {
 
               <div class="group group-gender ">
                 <div>
-                  <label htmlFor="" className="lev fw-bold">
+                  <label htmlFor="" className="lev">
                     Gender
                   </label>
                 </div>
