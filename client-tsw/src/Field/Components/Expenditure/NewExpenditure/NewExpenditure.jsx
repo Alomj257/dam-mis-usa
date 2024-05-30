@@ -4,6 +4,7 @@ import "./NewExpenditure.css";
 import { toast } from "react-toastify";
 import { createFieldService } from "../../../../APIServices/FIeld/Field/FieldService";
 import useFetch from "../../../../Hooks/useFetch";
+import { Select } from "antd";
 const NewExpenditure = ({ openPop, setPop, onAdd }) => {
   const [field, setField] = useState(null);
   const [users, setuser] = useState([]);
@@ -29,6 +30,16 @@ const NewExpenditure = ({ openPop, setPop, onAdd }) => {
       console.log(error);
       toast.error(error?.response?.data?.message || error?.response?.data);
     }
+  };
+  const options = [];
+  for (let i = 0; i < users.length; i++) {
+    options.push({
+      label: users[i]?.name,
+      value: users[i]?._id,
+    });
+  }
+  const handleSelectChange = (value) => {
+    console.log(`selected ${value}`);
   };
   return (
     <>
@@ -103,6 +114,16 @@ const NewExpenditure = ({ openPop, setPop, onAdd }) => {
                   </div>
                   <div className="d-flex flex-column gap-2">
                     <label htmlFor="maintainer">Maintainer*</label>
+                    <Select
+                      mode="multiple"
+                      allowClear
+                      style={{
+                        width: "100%",
+                      }}
+                      placeholder="Please select"
+                      onChange={handleSelectChange}
+                      options={options}
+                    />
                     <select
                       type="text"
                       id="maintainer"

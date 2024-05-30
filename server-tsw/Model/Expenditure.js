@@ -9,7 +9,7 @@ const userSchema = new mongoose.Schema(
       type: String,
     },
     fuelCost: String,
-    material: { type: mongoose.Schema.Types.ObjectId, ref: "material" },
+    material: [{ type: mongoose.Schema.Types.ObjectId, ref: "material" }],
     maintainer: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "user",

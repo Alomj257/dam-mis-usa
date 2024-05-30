@@ -5,6 +5,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { updateFieldService } from "../../../../APIServices/FIeld/Field/FieldService";
 import GetUserName from "../../../../Utils/GetUserName";
+import Expenditure from "../Expenditure/Expenditure";
 const FieldDetails = () => {
   const { state } = useLocation();
   const [field, setField] = useState(state);
@@ -105,7 +106,7 @@ const FieldDetails = () => {
           </div>
         )}
       </form>
-      {/* <Parts workshop={state} /> */}
+      <Expenditure field={state} />
     </div>
   );
 };
